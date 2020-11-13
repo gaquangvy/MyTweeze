@@ -29,6 +29,7 @@ public class User implements Member {
         id = "user" + ((int)(new Random().nextDouble() * 1000000));
         name = "New User";
         posts = new ArrayList<>();
+        newsfeed = new ArrayList<>();
         followings = new ArrayList<>();
         followers = new ArrayList<>();
     }

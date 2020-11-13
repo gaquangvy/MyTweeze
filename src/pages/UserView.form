@@ -1,13 +1,180 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="pages.UserView">
-  <grid id="27dc6" row-count="1" column-count="1" layout-manager="GridLayoutManager">
-    <margin top="0" left="0" bottom="0" right="0"/>
+  <grid id="27dc6" binding="userView" layout-manager="GridBagLayout">
     <constraints>
-      <xy x="20" y="20" width="500" height="400"/>
-      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+      <xy x="20" y="20" width="600" height="600"/>
     </constraints>
-    <properties/>
+    <properties>
+      <background color="-1126417"/>
+      <foreground color="-16777216"/>
+      <maximumSize width="600" height="600"/>
+      <minimumSize width="600" height="600"/>
+      <preferredSize width="600" height="600"/>
+    </properties>
     <border type="none"/>
-    <children/>
+    <children>
+      <grid id="2fc8c" layout-manager="GridBagLayout">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="1.0" weighty="1.0"/>
+        </constraints>
+        <properties>
+          <background color="-1126417"/>
+          <maximumSize width="600" height="200"/>
+          <minimumSize width="600" height="200"/>
+          <preferredSize width="600" height="200"/>
+          <requestFocusEnabled value="false"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="8c029" class="javax.swing.JButton" binding="followButton" default-binding="true">
+            <constraints>
+              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties>
+              <maximumSize width="100" height="30"/>
+              <minimumSize width="100" height="30"/>
+              <preferredSize width="100" height="30"/>
+              <text value="Follow"/>
+            </properties>
+          </component>
+          <component id="bf8f5" class="javax.swing.JButton" binding="tweezeButton" default-binding="true">
+            <constraints>
+              <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.0" weighty="1.0"/>
+            </constraints>
+            <properties>
+              <maximumSize width="100" height="50"/>
+              <minimumSize width="100" height="50"/>
+              <preferredSize width="100" height="50"/>
+              <text value="Tweeze"/>
+            </properties>
+          </component>
+          <scrollpane id="d876b">
+            <constraints>
+              <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="1.0" weighty="1.0"/>
+            </constraints>
+            <properties>
+              <maximumSize width="340" height="150"/>
+              <minimumSize width="340" height="150"/>
+              <preferredSize width="340" height="150"/>
+            </properties>
+            <border type="none"/>
+            <children>
+              <component id="6275c" class="javax.swing.JTextArea" binding="tweezeContent">
+                <constraints/>
+                <properties>
+                  <maximumSize width="340" height="150"/>
+                  <minimumSize width="340" height="150"/>
+                  <opaque value="true"/>
+                  <preferredSize width="340" height="150"/>
+                </properties>
+              </component>
+            </children>
+          </scrollpane>
+          <component id="f7c04" class="javax.swing.JLabel" binding="username">
+            <constraints>
+              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+              <gridbag weightx="0.0" weighty="0.0"/>
+            </constraints>
+            <properties>
+              <font name="Goudy Stout" size="22"/>
+              <horizontalAlignment value="0"/>
+              <horizontalTextPosition value="0"/>
+              <maximumSize width="550" height="50"/>
+              <minimumSize width="550" height="50"/>
+              <preferredSize width="550" height="50"/>
+              <text value="Label"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <component id="a843d" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <font name="Comic Sans MS" size="26" style="1"/>
+          <foreground color="-16777216"/>
+          <horizontalAlignment value="0"/>
+          <maximumSize width="200" height="50"/>
+          <minimumSize width="200" height="50"/>
+          <preferredSize width="200" height="50"/>
+          <text value="Followings"/>
+          <verticalAlignment value="3"/>
+        </properties>
+      </component>
+      <hspacer id="749ec">
+        <constraints>
+          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+      </hspacer>
+      <component id="c2cec" class="javax.swing.JLabel">
+        <constraints>
+          <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <focusable value="true"/>
+          <font name="Comic Sans MS" size="26" style="1"/>
+          <foreground color="-16777216"/>
+          <horizontalAlignment value="0"/>
+          <maximumSize width="400" height="50"/>
+          <minimumSize width="400" height="50"/>
+          <preferredSize width="400" height="50"/>
+          <text value="Newfeeds"/>
+          <verticalAlignment value="3"/>
+        </properties>
+      </component>
+      <scrollpane id="b87ee">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <maximumSize width="200" height="350"/>
+          <minimumSize width="200" height="350"/>
+          <preferredSize width="200" height="350"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="aa0be" class="javax.swing.JList" binding="followingList">
+            <constraints/>
+            <properties>
+              <maximumSize width="200" height="350"/>
+              <minimumSize width="200" height="350"/>
+              <preferredSize width="200" height="350"/>
+            </properties>
+          </component>
+        </children>
+      </scrollpane>
+      <scrollpane id="6da9b">
+        <constraints>
+          <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <maximumSize width="400" height="350"/>
+          <minimumSize width="400" height="350"/>
+          <preferredSize width="400" height="350"/>
+          <verifyInputWhenFocusTarget value="false"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="3c435" class="javax.swing.JList" binding="newfeedList">
+            <constraints/>
+            <properties>
+              <maximumSize width="400" height="350"/>
+              <minimumSize width="400" height="350"/>
+              <preferredSize width="400" height="350"/>
+            </properties>
+          </component>
+        </children>
+      </scrollpane>
+    </children>
   </grid>
 </form>

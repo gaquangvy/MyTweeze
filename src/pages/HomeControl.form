@@ -188,7 +188,7 @@
                       <maximumSize width="180" height="60"/>
                       <minimumSize width="180" height="60"/>
                       <preferredSize width="180" height="60"/>
-                      <text value="Number of Total Users"/>
+                      <text value="Show Total Users"/>
                     </properties>
                   </component>
                 </children>
@@ -209,7 +209,7 @@
                       <maximumSize width="180" height="60"/>
                       <minimumSize width="180" height="60"/>
                       <preferredSize width="180" height="60"/>
-                      <text value="Number of Total Groups"/>
+                      <text value="Show Total Groups"/>
                     </properties>
                   </component>
                 </children>
@@ -231,7 +231,7 @@
                       <maximumSize width="180" height="60"/>
                       <minimumSize width="180" height="60"/>
                       <preferredSize width="180" height="60"/>
-                      <text value="Number of Tweezes"/>
+                      <text value="Show Total Tweezes"/>
                     </properties>
                   </component>
                 </children>
@@ -246,13 +246,13 @@
                 </properties>
                 <border type="none"/>
                 <children>
-                  <component id="e83ad" class="javax.swing.JButton" binding="percentPositivePostsButton" default-binding="true">
+                  <component id="e83ad" class="javax.swing.JButton" binding="showPositiveTweezeButton" default-binding="true">
                     <constraints/>
                     <properties>
                       <maximumSize width="180" height="60"/>
                       <minimumSize width="180" height="60"/>
                       <preferredSize width="180" height="60"/>
-                      <text value="Percent Positive Posts"/>
+                      <text value="Show Positive Tweeze"/>
                     </properties>
                   </component>
                 </children>
@@ -299,7 +299,7 @@
               <foreground color="-15464429"/>
               <horizontalAlignment value="0"/>
               <horizontalTextPosition value="0"/>
-              <text value="Label"/>
+              <text value=""/>
             </properties>
           </component>
           <scrollpane id="26656" binding="treePane">

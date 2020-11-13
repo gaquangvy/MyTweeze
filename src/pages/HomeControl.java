@@ -14,6 +14,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class HomeControl extends JPanel {
     private JButton numberOfTotalUsersButton;
     private JButton numberOfTotalGroupsButton;
     private JButton numberOfTweezesButton;
-    private JButton percentPositivePostsButton;
+    private JButton showPositiveTweezeButton;
     private JButton userViewButton;
     private JButton groupViewButton;
     private JTextField userTextField;
@@ -123,7 +124,7 @@ public class HomeControl extends JPanel {
                         if (!root.search(userTextField.getText(), Member.Type.USER)) {
                             User user = new User();
                             user.setId(userTextField.getText());
-                            root.add(user);
+                            instance.root.add(user);
                             treeSelected.setText("");
                         } else treeSelected.setText("NO DUPLICATION!");
                     }
@@ -137,31 +138,111 @@ public class HomeControl extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if (numberOfTotalUsersButton.getText().equals("Number of Total Users")) {
+                if (numberOfTotalUsersButton.getText().equals("Show Total Users"))
+                    numberOfTotalUsersButton.setText(collectUsers().size() + " Users in Total");
+                else numberOfTotalUsersButton.setText("Show Total Users");
+            }
+        });
+        numberOfTotalGroupsButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if (numberOfTotalGroupsButton.getText().equals("Show Total Groups"))
+                    numberOfTotalGroupsButton.setText(collectGroups().size() + " Groups in Total");
+                else numberOfTotalGroupsButton.setText("Show Total Groups");
+            }
+        });
+        numberOfTweezesButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if (numberOfTweezesButton.getText().equals("Show Total Tweezes")) {
                     int result = 0;
+                    List<User> users = new ArrayList<>();
                     List<UserGroup> groups = new ArrayList<>();
                     groups.add(root);
-                    while (!groups.isEmpty()) for (UserGroup group : groups) {
-                        for (Member m : group.getMembers()) {
+                    while (!groups.isEmpty()) {
+                        for (Member m : groups.get(0).getMembers())
                             if (m.getType() == Member.Type.GROUP) groups.add((UserGroup) m);
-                            else result++;
-                        }
-                        groups.remove(group);
+                            else users.add((User) m);
+                        groups.remove(0);
                     }
-                    numberOfTotalUsersButton.setText(result + " Users in Total");
-                }
-                else numberOfTotalUsersButton.setText("Number of Total Users");
+                    for (User user : users) user.getPosts().size();
+                    numberOfTweezesButton.setText(result + " Tweezes in Total");
+                } else numberOfTweezesButton.setText("Show Total Tweezes");
+            }
+        });
+        showPositiveTweezeButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if (showPositiveTweezeButton.getText().equals("Show Positive Tweeze")) {
+                    int result = 0;
+                    List<String> tweezes = new ArrayList<>();
+                    List<UserGroup> groups = new ArrayList<>();
+                    groups.add(root);
+                    while (!groups.isEmpty()) {
+                        for (Member m : groups.get(0).getMembers())
+                            if (m.getType() == Member.Type.GROUP) groups.add((UserGroup) m);
+                            else tweezes.addAll(((User) m).getPosts());
+                        groups.remove(0);
+                    }
+                    for (String tweeze : tweezes) {
+                        List<String> positiveDictionary;
+                        try {
+                            positiveDictionary = PositiveWordsCollection.outList();
+                        } catch (FileNotFoundException fileNotFoundException) {
+                            positiveDictionary = new ArrayList<>();
+                        }
+                        for (String word : positiveDictionary)
+                            if (tweeze.contains(word)) result++;
+                    }
+                    showPositiveTweezeButton.setText((tweezes.size() == 0 ? 0 : result / tweezes.size()) + "% Tweezes in Total");
+                } else showPositiveTweezeButton.setText("Show Positive Tweeze");
+            }
+        });
+        userViewButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                FramePage userView = new FramePage(new UserView((User) chosenMember));
             }
         });
     }
 
-    public static DefaultMutableTreeNode generateTree(UserGroup root) {
+    private DefaultMutableTreeNode generateTree(UserGroup root) {
         DefaultMutableTreeNode example = new DefaultMutableTreeNode(root.getId());
         for (Member m : root.getMembers())
             if (m.getType() == Member.Type.USER)
                 example.add(new DefaultMutableTreeNode(m.getId()));
             else example.add(generateTree((UserGroup) m));
         return example;
+    }
+
+    public List<User> collectUsers() {
+        List<User> users = new ArrayList<>();
+        List<UserGroup> groups = new ArrayList<>();
+        groups.add(root);
+        while (!groups.isEmpty()) {
+            for (Member m : groups.get(0).getMembers())
+                if (m.getType() == Member.Type.GROUP) groups.add((UserGroup) m);
+                else users.add((User) m);
+            groups.remove(0);
+        }
+        return users;
+    }
+
+    public List<UserGroup> collectGroups() {
+        List<UserGroup> groups = new ArrayList<>();
+        groups.add(root);
+        int i = 0;
+        while (i < groups.size()) {
+            for (Member m : groups.get(i).getMembers())
+                if (m.getType() == Member.Type.GROUP) groups.add((UserGroup) m);
+            ++i;
+        }
+        groups.remove(0); //no root groups (admin)
+        return groups;
     }
 
     public static HomeControl getInstance() {
@@ -347,7 +428,7 @@ public class HomeControl extends JPanel {
         numberOfTotalUsersButton.setMaximumSize(new Dimension(180, 60));
         numberOfTotalUsersButton.setMinimumSize(new Dimension(180, 60));
         numberOfTotalUsersButton.setPreferredSize(new Dimension(180, 60));
-        numberOfTotalUsersButton.setText("Number of Total Users");
+        numberOfTotalUsersButton.setText("Show Total Users");
         panel4.add(numberOfTotalUsersButton);
         final JPanel panel5 = new JPanel();
         panel5.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -363,7 +444,7 @@ public class HomeControl extends JPanel {
         numberOfTotalGroupsButton.setMaximumSize(new Dimension(180, 60));
         numberOfTotalGroupsButton.setMinimumSize(new Dimension(180, 60));
         numberOfTotalGroupsButton.setPreferredSize(new Dimension(180, 60));
-        numberOfTotalGroupsButton.setText("Number of Total Groups");
+        numberOfTotalGroupsButton.setText("Show Total Groups");
         panel5.add(numberOfTotalGroupsButton);
         final JPanel panel6 = new JPanel();
         panel6.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -380,7 +461,7 @@ public class HomeControl extends JPanel {
         numberOfTweezesButton.setMaximumSize(new Dimension(180, 60));
         numberOfTweezesButton.setMinimumSize(new Dimension(180, 60));
         numberOfTweezesButton.setPreferredSize(new Dimension(180, 60));
-        numberOfTweezesButton.setText("Number of Tweezes");
+        numberOfTweezesButton.setText("Show Total Tweezes");
         panel6.add(numberOfTweezesButton);
         final JPanel panel7 = new JPanel();
         panel7.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -392,12 +473,12 @@ public class HomeControl extends JPanel {
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.NORTHWEST;
         panel3.add(panel7, gbc);
-        percentPositivePostsButton = new JButton();
-        percentPositivePostsButton.setMaximumSize(new Dimension(180, 60));
-        percentPositivePostsButton.setMinimumSize(new Dimension(180, 60));
-        percentPositivePostsButton.setPreferredSize(new Dimension(180, 60));
-        percentPositivePostsButton.setText("Percent Positive Posts");
-        panel7.add(percentPositivePostsButton);
+        showPositiveTweezeButton = new JButton();
+        showPositiveTweezeButton.setMaximumSize(new Dimension(180, 60));
+        showPositiveTweezeButton.setMinimumSize(new Dimension(180, 60));
+        showPositiveTweezeButton.setPreferredSize(new Dimension(180, 60));
+        showPositiveTweezeButton.setText("Show Positive Tweeze");
+        panel7.add(showPositiveTweezeButton);
         left = new JPanel();
         left.setLayout(new GridBagLayout());
         left.setBackground(new Color(-4168530));
@@ -431,7 +512,7 @@ public class HomeControl extends JPanel {
         treeSelected.setForeground(new Color(-15464429));
         treeSelected.setHorizontalAlignment(0);
         treeSelected.setHorizontalTextPosition(0);
-        treeSelected.setText("Label");
+        treeSelected.setText("");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 2;
