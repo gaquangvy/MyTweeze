@@ -50,6 +50,7 @@ public class HomeControl extends JPanel {
     private HomeControl() {
         add(homeControl);
         root = UIMembers.generateExample1();
+        root.setId("Root");
         treeGroup.setModel(new DefaultTreeModel(generateTree(root)));
         treeGroup.addMouseListener(new MouseAdapter() {
             @Override
@@ -222,6 +223,7 @@ public class HomeControl extends JPanel {
                 if (e.getKeyCode() == 10) {
                     if (!groupTextField.getText().isEmpty()) {
                         if (!root.search(groupTextField.getText(), Member.Type.GROUP)) {
+                            System.out.println(root.search(groupTextField.getText(), Member.Type.GROUP));
                             UserGroup group = new UserGroup();
                             group.setId(groupTextField.getText());
                             instance.root.add(group);
@@ -255,6 +257,7 @@ public class HomeControl extends JPanel {
 
     private DefaultMutableTreeNode generateTree(UserGroup root) {
         DefaultMutableTreeNode example = new DefaultMutableTreeNode(root.getId());
+        if (root.getMembers().isEmpty()) example.add(new DefaultMutableTreeNode());
         for (Member m : root.getMembers())
             if (m.getType() == Member.Type.USER)
                 example.add(new DefaultMutableTreeNode(m.getId()));

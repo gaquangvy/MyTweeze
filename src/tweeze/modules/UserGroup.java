@@ -33,8 +33,8 @@ public class UserGroup implements Member {
 
     public boolean search(String id, Type type) {
         for (Member m: members)
-            if (m.getId().equals(id) && m.getType() == type)
-                return (type == Type.USER) ? true : ((UserGroup) m).search(id, type);
+            if (m.getId().equals(id) && m.getType() == type) return true;
+            else if (m.getType() == Type.GROUP) return ((UserGroup) m).search(id, type);
         return false;
     }
 
