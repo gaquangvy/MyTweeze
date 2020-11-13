@@ -208,6 +208,49 @@ public class HomeControl extends JPanel {
                 FramePage userView = new FramePage(new UserView((User) chosenMember));
             }
         });
+        groupTextField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                super.keyTyped(e);
+                addGroupButton.setEnabled(!groupTextField.getText().isEmpty());
+            }
+        });
+        groupTextField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if (e.getKeyCode() == 10) {
+                    if (!groupTextField.getText().isEmpty()) {
+                        if (!root.search(groupTextField.getText(), Member.Type.GROUP)) {
+                            UserGroup group = new UserGroup();
+                            group.setId(groupTextField.getText());
+                            instance.root.add(group);
+                            treeSelected.setText("");
+                        } else treeSelected.setText("NO DUPLICATION!");
+                    }
+                    treeGroup.setModel(new DefaultTreeModel(generateTree(root)));
+                    groupTextField.selectAll();
+                    groupTextField.replaceSelection("");
+                }
+            }
+        });
+        addGroupButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                if (!groupTextField.getText().isEmpty()) {
+                    if (!root.search(groupTextField.getText(), Member.Type.GROUP)) {
+                        UserGroup group = new UserGroup();
+                        group.setId(groupTextField.getText());
+                        root.add(group);
+                        treeSelected.setText("");
+                    } else treeSelected.setText("NO DUPLICATION!");
+                }
+                treeGroup.setModel(new DefaultTreeModel(generateTree(root)));
+                groupTextField.selectAll();
+                groupTextField.replaceSelection("");
+            }
+        });
     }
 
     private DefaultMutableTreeNode generateTree(UserGroup root) {
