@@ -21,7 +21,6 @@ public class PositiveWordsCollection {
             String line = in.nextLine();
             line = line.split(". ")[1].toLowerCase();
             output.add(line);
-            System.out.println(line);
         }
         in.close();
         return output;

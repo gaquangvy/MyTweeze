@@ -10,4 +10,5 @@ public interface Member {
     Type getType();
     void setName(String name);
     void setId(String id);
+    boolean equals(String newId);
 }

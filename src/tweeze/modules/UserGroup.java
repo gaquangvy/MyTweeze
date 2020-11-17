@@ -25,26 +25,15 @@ public class UserGroup implements Member {
     }
 
     public void add(Member m) { members.add(m); }
-    public void remove(String id, Type type) {
+    public void remove(Member mem) {
+        Member found = null;
         for (Member m: members)
-            if (m.getId().equals(id) && m.getType() == type)
-                members.remove(m);
+            if (m.equals(mem.getId()) && m.getType() == mem.getType())
+                found = m;
+        if (found != null) members.remove(found);
     }
 
-    public boolean search(String id, Type type) {
-        for (Member m: members)
-            if (m.getId().equals(id) && m.getType() == type) return true;
-            else if (m.getType() == Type.GROUP) return ((UserGroup) m).search(id, type);
-        return false;
-    }
-
-    @Override
-    public String toString() {
-        String result = name + ": [";
-        for (Member m: members)
-            if (m.getId().contains("user")) result += m.getName() + ", ";
-            else result += m;
-        result += "]";
-        return result;
+    public boolean equals(String newId) {
+        return id.equals(newId);
     }
 }

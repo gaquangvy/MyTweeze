@@ -10,14 +10,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-import static java.awt.Font.BOLD;
-
 public class UserView extends JPanel {
     //outputs
-    private User user;
+    private User viewed;
+    private final User viewing;
 
     public String getName() {
-        return "MyTweeze@" + user.getId();
+        return "My Tweeze (" + viewing.getName() + " @" + viewing.getId() + ") View ";
     }
 
     private JPanel userView;
@@ -26,29 +25,24 @@ public class UserView extends JPanel {
     private JTextArea tweezeContent;
     private JList followingList;
     private JList newfeedList;
-    private JLabel username;
+    private JTextField username;
+    private JLabel newsfeedTitle;
+    private JLabel followingTitle;
 
     UserView(User user) {
-        this.user = user;
+        viewed = user;
+        viewing = user;
         add(userView);
 
-        username.setText(user.getName());
-        followingList.setModel(generateFollowings());
-        newfeedList.setModel(generateNewsfeed());
-        tweezeButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                user.post(tweezeContent.getText());
-            }
-        });
+        update();
         tweezeButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 String content = tweezeContent.getText();
                 if (!content.isEmpty() && content.length() > 2)
-                    user.post(content);
+                    viewed.post(content);
+                HomeControl.getInstance().update();
             }
         });
         tweezeContent.addKeyListener(new KeyAdapter() {
@@ -58,30 +52,84 @@ public class UserView extends JPanel {
                 tweezeButton.setEnabled(!tweezeContent.getText().isEmpty() && tweezeContent.getText().length() > 2);
             }
         });
+        username.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e); //Enter keycode = 10
+                if (e.getKeyCode() == 10) {
+                    User foundUser = null;
+                    for (User user : HomeControl.getInstance().collectUsers())
+                        if (user.getId().equals(username.getText()))
+                            foundUser = user;
+                    if (foundUser != null) view(foundUser);
+                }
+            }
+        });
+        username.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                username.setText("");
+            }
+        });
+        followButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                viewing.follow(viewed);
+                HomeControl.getInstance().update();
+            }
+        });
+    }
+
+    public void view(User other) {
+        viewed = other;
+        update();
+        newsfeedTitle.setText(viewing.equals(viewed.getId()) ? "Newsfeed" : "User's Posts");
+        followingTitle.setText(viewing.equals(viewed.getId()) ? "Followings" : "Mutual Follow");
     }
 
     private DefaultListModel generateFollowings() {
         DefaultListModel followingsList = new DefaultListModel();
-        List<User> followings = user.getFollowings();
-        if (followings.isEmpty()) followingsList.addElement("No Following");
-        for (User user : followings)
-            followingsList.addElement("- " + user.getName() + " @ " + user.getId());
+        List<User> viewedFollowings = viewed.getFollowings();
+        List<User> viewingFollowings = viewing.getFollowings();
+        if (viewedFollowings.isEmpty()) followingsList.addElement("No Following");
+        for (User viewedLocal : viewedFollowings)
+            for (User viewingLocal : viewingFollowings)
+                if (viewedLocal.equals(viewingLocal.getId())) {
+                    followingsList.addElement("- " + viewedLocal.getName() + " @" + viewedLocal.getId());
+                    break;
+                }
         return followingsList;
     }
 
     private DefaultListModel generateNewsfeed() {
         DefaultListModel newsfeed = new DefaultListModel();
-        List<String[]> news = user.getNewsfeed();
+        List<String[]> news = viewed.getNewsfeed();
         if (news.isEmpty()) newsfeed.addElement("Newsfeed is Empty");
-        else for (String[] post : news) {
-            JPanel pane = new JPanel();
-            JLabel user = new JLabel(post[0] + ": ");
-            user.setFont(new Font("Verdana", BOLD, 12));
-            pane.add(user);
-            pane.add(new JLabel(post[1]));
-            newsfeed.addElement(pane);
-        }
+        else for (String[] post : news)
+            newsfeed.addElement("+ " + post[0] + ": " + post[1]);
         return newsfeed;
+    }
+
+    private DefaultListModel generatePosts() {
+        DefaultListModel posts = new DefaultListModel();
+        if (viewed.getPosts().isEmpty()) posts.addElement("Newsfeed is Empty");
+        else for (String post : viewed.getPosts())
+            posts.addElement(post);
+        return posts;
+    }
+
+    public void update() {
+        username.setText(viewed.getId());
+        followingList.setModel(generateFollowings());
+        newfeedList.setModel(viewed.equals(viewing) ? generateNewsfeed() : generatePosts());
+        tweezeContent.setText("");
+        tweezeContent.setEnabled(viewed.equals(viewing));
+        tweezeButton.setEnabled(false);
+        boolean found = false;
+        for (User user : viewing.getFollowings()) found |= user.equals(viewed);
+        followButton.setEnabled(!viewed.equals(viewing) && !found);
     }
 
     {
@@ -160,57 +208,53 @@ public class UserView extends JPanel {
         tweezeContent.setOpaque(true);
         tweezeContent.setPreferredSize(new Dimension(340, 150));
         scrollPane1.setViewportView(tweezeContent);
-        username = new JLabel();
-        Font usernameFont = this.$$$getFont$$$("Goudy Stout", -1, 22, username.getFont());
-        if (usernameFont != null) username.setFont(usernameFont);
+        username = new JTextField();
         username.setHorizontalAlignment(0);
-        username.setHorizontalTextPosition(0);
         username.setMaximumSize(new Dimension(550, 50));
         username.setMinimumSize(new Dimension(550, 50));
+        username.setOpaque(false);
         username.setPreferredSize(new Dimension(550, 50));
-        username.setText("Label");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.WEST;
         panel1.add(username, gbc);
-        final JLabel label1 = new JLabel();
-        Font label1Font = this.$$$getFont$$$("Comic Sans MS", Font.BOLD, 26, label1.getFont());
-        if (label1Font != null) label1.setFont(label1Font);
-        label1.setForeground(new Color(-16777216));
-        label1.setHorizontalAlignment(0);
-        label1.setMaximumSize(new Dimension(200, 50));
-        label1.setMinimumSize(new Dimension(200, 50));
-        label1.setPreferredSize(new Dimension(200, 50));
-        label1.setText("Followings");
-        label1.setVerticalAlignment(3);
+        followingTitle = new JLabel();
+        Font followingTitleFont = this.$$$getFont$$$("Comic Sans MS", Font.BOLD, 26, followingTitle.getFont());
+        if (followingTitleFont != null) followingTitle.setFont(followingTitleFont);
+        followingTitle.setForeground(new Color(-16777216));
+        followingTitle.setHorizontalAlignment(0);
+        followingTitle.setMaximumSize(new Dimension(200, 50));
+        followingTitle.setMinimumSize(new Dimension(200, 50));
+        followingTitle.setPreferredSize(new Dimension(200, 50));
+        followingTitle.setText("Followings");
+        followingTitle.setVerticalAlignment(3);
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.WEST;
-        userView.add(label1, gbc);
+        userView.add(followingTitle, gbc);
         final JPanel spacer1 = new JPanel();
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         userView.add(spacer1, gbc);
-        final JLabel label2 = new JLabel();
-        label2.setFocusable(true);
-        Font label2Font = this.$$$getFont$$$("Comic Sans MS", Font.BOLD, 26, label2.getFont());
-        if (label2Font != null) label2.setFont(label2Font);
-        label2.setForeground(new Color(-16777216));
-        label2.setHorizontalAlignment(0);
-        label2.setMaximumSize(new Dimension(400, 50));
-        label2.setMinimumSize(new Dimension(400, 50));
-        label2.setPreferredSize(new Dimension(400, 50));
-        label2.setText("Newfeeds");
-        label2.setVerticalAlignment(3);
+        newsfeedTitle = new JLabel();
+        newsfeedTitle.setFocusable(true);
+        Font newsfeedTitleFont = this.$$$getFont$$$("Comic Sans MS", Font.BOLD, 26, newsfeedTitle.getFont());
+        if (newsfeedTitleFont != null) newsfeedTitle.setFont(newsfeedTitleFont);
+        newsfeedTitle.setForeground(new Color(-16777216));
+        newsfeedTitle.setHorizontalAlignment(0);
+        newsfeedTitle.setMaximumSize(new Dimension(400, 50));
+        newsfeedTitle.setMinimumSize(new Dimension(400, 50));
+        newsfeedTitle.setPreferredSize(new Dimension(400, 50));
+        newsfeedTitle.setText("Newfeeds");
+        newsfeedTitle.setVerticalAlignment(3);
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.WEST;
-        userView.add(label2, gbc);
+        userView.add(newsfeedTitle, gbc);
         final JScrollPane scrollPane2 = new JScrollPane();
         scrollPane2.setMaximumSize(new Dimension(200, 350));
         scrollPane2.setMinimumSize(new Dimension(200, 350));

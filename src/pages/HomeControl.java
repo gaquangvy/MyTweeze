@@ -40,6 +40,7 @@ public class HomeControl extends JPanel {
     //value input to show
     private final UserGroup root;
     private Member chosenMember;
+    private List<UserView> panels = new ArrayList<>();
 
     public String getName() {
         return "My Tweeze (ADMIN)";
@@ -51,7 +52,7 @@ public class HomeControl extends JPanel {
         add(homeControl);
         root = UIMembers.generateExample1();
         root.setId("Root");
-        treeGroup.setModel(new DefaultTreeModel(generateTree(root)));
+        update();
         treeGroup.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
@@ -79,27 +80,23 @@ public class HomeControl extends JPanel {
             }
         });
 
-        //initially disable buttons
-        userViewButton.setEnabled(false);
-        groupViewButton.setEnabled(false);
-        if (userTextField.getText().isEmpty()) addUserButton.setEnabled(false);
-        if (groupTextField.getText().isEmpty()) addGroupButton.setEnabled(false);
-
         addUserButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if (!userTextField.getText().isEmpty()) {
-                    if (!root.search(userTextField.getText(), Member.Type.USER)) {
+                String newID = userTextField.getText();
+                if (!newID.isEmpty()) {
+                    boolean duplicate = false;
+                    for (User user : collectUsers())
+                        duplicate |= user.equals(newID);
+                    if (duplicate) treeSelected.setText("NO DUPLICATION");
+                    else {
                         User user = new User();
-                        user.setId(userTextField.getText());
+                        user.setId(newID);
                         root.add(user);
-                        treeSelected.setText("");
-                    } else treeSelected.setText("NO DUPLICATION!");
+                        update();
+                    }
                 }
-                treeGroup.setModel(new DefaultTreeModel(generateTree(root)));
-                userTextField.selectAll();
-                userTextField.replaceSelection("");
             }
         });
         userTextField.addKeyListener(new KeyAdapter() {
@@ -108,31 +105,32 @@ public class HomeControl extends JPanel {
                 super.keyTyped(e);
                 addUserButton.setEnabled(!userTextField.getText().isEmpty());
             }
-        });
-        treeGroup.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                super.keyPressed(e); //Delete key code = 127
-                treeGroup.setModel(new DefaultTreeModel(generateTree(root)));
-            }
-        });
-        userTextField.addKeyListener(new KeyAdapter() {
+
             @Override
             public void keyPressed(KeyEvent e) {
                 super.keyPressed(e); // Enter keycode = 10
                 if (e.getKeyCode() == 10) {
-                    if (!userTextField.getText().isEmpty()) {
-                        if (!root.search(userTextField.getText(), Member.Type.USER)) {
+                    String newID = userTextField.getText();
+                    if (!newID.isEmpty()) {
+                        boolean duplicate = false;
+                        for (User user : collectUsers())
+                            duplicate |= user.equals(newID);
+                        if (duplicate) treeSelected.setText("NO DUPLICATION");
+                        else {
                             User user = new User();
-                            user.setId(userTextField.getText());
-                            instance.root.add(user);
-                            treeSelected.setText("");
-                        } else treeSelected.setText("NO DUPLICATION!");
+                            user.setId(newID);
+                            root.add(user);
+                            update();
+                        }
                     }
-                    treeGroup.setModel(new DefaultTreeModel(generateTree(root)));
-                    userTextField.selectAll();
-                    userTextField.replaceSelection("");
                 }
+            }
+        });
+        treeGroup.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent evt) {
+                super.keyPressed(evt); //Delete key code = 127
+                update();
             }
         });
         numberOfTotalUsersButton.addMouseListener(new MouseAdapter() {
@@ -159,16 +157,8 @@ public class HomeControl extends JPanel {
                 super.mouseClicked(e);
                 if (numberOfTweezesButton.getText().equals("Show Total Tweezes")) {
                     int result = 0;
-                    List<User> users = new ArrayList<>();
-                    List<UserGroup> groups = new ArrayList<>();
-                    groups.add(root);
-                    while (!groups.isEmpty()) {
-                        for (Member m : groups.get(0).getMembers())
-                            if (m.getType() == Member.Type.GROUP) groups.add((UserGroup) m);
-                            else users.add((User) m);
-                        groups.remove(0);
-                    }
-                    for (User user : users) user.getPosts().size();
+                    for (User user : collectUsers())
+                        result += user.getPosts().size();
                     numberOfTweezesButton.setText(result + " Tweezes in Total");
                 } else numberOfTweezesButton.setText("Show Total Tweezes");
             }
@@ -178,27 +168,21 @@ public class HomeControl extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 if (showPositiveTweezeButton.getText().equals("Show Positive Tweeze")) {
-                    int result = 0;
-                    List<String> tweezes = new ArrayList<>();
-                    List<UserGroup> groups = new ArrayList<>();
-                    groups.add(root);
-                    while (!groups.isEmpty()) {
-                        for (Member m : groups.get(0).getMembers())
-                            if (m.getType() == Member.Type.GROUP) groups.add((UserGroup) m);
-                            else tweezes.addAll(((User) m).getPosts());
-                        groups.remove(0);
-                    }
-                    for (String tweeze : tweezes) {
-                        List<String> positiveDictionary;
-                        try {
-                            positiveDictionary = PositiveWordsCollection.outList();
-                        } catch (FileNotFoundException fileNotFoundException) {
-                            positiveDictionary = new ArrayList<>();
+                    int result = 0, totalPosts = 0;
+                    for (User user : collectUsers()) {
+                        totalPosts += user.getPosts().size();
+                        for (String tweeze : user.getPosts()) {
+                            List<String> positiveDictionary;
+                            try {
+                                positiveDictionary = PositiveWordsCollection.outList();
+                            } catch (FileNotFoundException fileNotFoundException) {
+                                positiveDictionary = new ArrayList<>();
+                            }
+                            for (String word : positiveDictionary)
+                                if (tweeze.toLowerCase().contains(word)) result++;
                         }
-                        for (String word : positiveDictionary)
-                            if (tweeze.contains(word)) result++;
                     }
-                    showPositiveTweezeButton.setText((tweezes.size() == 0 ? 0 : result / tweezes.size()) + "% Tweezes in Total");
+                    showPositiveTweezeButton.setText((totalPosts == 0 ? 0 : (result * 100 / totalPosts)) + "% Tweezes in Total");
                 } else showPositiveTweezeButton.setText("Show Positive Tweeze");
             }
         });
@@ -206,7 +190,9 @@ public class HomeControl extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                FramePage userView = new FramePage(new UserView((User) chosenMember));
+                UserView userView = new UserView((User) chosenMember);
+                panels.add(userView);
+                new FramePage(userView);
             }
         });
         groupTextField.addKeyListener(new KeyAdapter() {
@@ -215,24 +201,24 @@ public class HomeControl extends JPanel {
                 super.keyTyped(e);
                 addGroupButton.setEnabled(!groupTextField.getText().isEmpty());
             }
-        });
-        groupTextField.addKeyListener(new KeyAdapter() {
+
             @Override
             public void keyPressed(KeyEvent e) {
                 super.keyPressed(e);
                 if (e.getKeyCode() == 10) {
-                    if (!groupTextField.getText().isEmpty()) {
-                        if (!root.search(groupTextField.getText(), Member.Type.GROUP)) {
-                            System.out.println(root.search(groupTextField.getText(), Member.Type.GROUP));
+                    String newID = groupTextField.getText();
+                    if (!newID.isEmpty()) {
+                        boolean duplicate = false;
+                        for (UserGroup group : collectGroups())
+                            duplicate |= group.equals(newID);
+                        if (duplicate) treeSelected.setText("NO DUPLICATION");
+                        else {
                             UserGroup group = new UserGroup();
-                            group.setId(groupTextField.getText());
-                            instance.root.add(group);
-                            treeSelected.setText("");
-                        } else treeSelected.setText("NO DUPLICATION!");
+                            group.setId(newID);
+                            root.add(group);
+                            update();
+                        }
                     }
-                    treeGroup.setModel(new DefaultTreeModel(generateTree(root)));
-                    groupTextField.selectAll();
-                    groupTextField.replaceSelection("");
                 }
             }
         });
@@ -240,23 +226,26 @@ public class HomeControl extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if (!groupTextField.getText().isEmpty()) {
-                    if (!root.search(groupTextField.getText(), Member.Type.GROUP)) {
+                String newID = groupTextField.getText();
+                if (!newID.isEmpty()) {
+                    boolean duplicate = false;
+                    for (UserGroup group : collectGroups())
+                        duplicate |= group.equals(newID);
+                    if (duplicate) treeSelected.setText("NO DUPLICATION");
+                    else {
                         UserGroup group = new UserGroup();
-                        group.setId(groupTextField.getText());
+                        group.setId(newID);
                         root.add(group);
-                        treeSelected.setText("");
-                    } else treeSelected.setText("NO DUPLICATION!");
+                        update();
+                    }
                 }
-                treeGroup.setModel(new DefaultTreeModel(generateTree(root)));
-                groupTextField.selectAll();
-                groupTextField.replaceSelection("");
             }
         });
     }
 
     private DefaultMutableTreeNode generateTree(UserGroup root) {
         DefaultMutableTreeNode example = new DefaultMutableTreeNode(root.getId());
+        example.setAllowsChildren(true);
         if (root.getMembers().isEmpty()) example.add(new DefaultMutableTreeNode());
         for (Member m : root.getMembers())
             if (m.getType() == Member.Type.USER)
@@ -294,6 +283,23 @@ public class HomeControl extends JPanel {
     public static HomeControl getInstance() {
         if (instance == null) instance = new HomeControl();
         return instance;
+    }
+
+    public void update() {
+        treeGroup.setModel(new DefaultTreeModel(generateTree(root)));
+        userViewButton.setEnabled(false);
+        groupViewButton.setEnabled(false);
+        addUserButton.setEnabled(false);
+        addGroupButton.setEnabled(false);
+        groupTextField.setText("");
+        userTextField.setText("");
+        treeSelected.setText("");
+        numberOfTotalUsersButton.setText("Show Total Users");
+        numberOfTotalGroupsButton.setText("Show Total Groups");
+        numberOfTweezesButton.setText("Show Total Tweezes");
+        showPositiveTweezeButton.setText("Show Positive Tweeze");
+        for (UserView view : panels)
+            view.update();
     }
 
     {

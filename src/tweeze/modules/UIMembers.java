@@ -1,5 +1,7 @@
 package tweeze.modules;
 
+import java.util.Random;
+
 //Clients
 public class UIMembers {
     public static void main(String[] args) {
@@ -10,43 +12,32 @@ public class UIMembers {
         UserGroup root = new UserGroup();
         root.setName("Root");
 
-        User user1 = new User();
-        User user2 = new User();
-        User user3 = new User();
-        User user4 = new User();
-        User user5 = new User();
-        User user6 = new User();
-        User user7 = new User();
-        User user8 = new User();
+        Random rand = new Random();
+        User[] users = new User[12];
+        for (int i = 0; i < 12; i++) {
+            users[i] = new User();
+            users[i].setName("User " + (i+1));
+        }
+        UserGroup[] groups = new UserGroup[3];
+        for (int i = 0; i < 3; i++) {
+            groups[i] = new UserGroup();
+            groups[i].setName("Group " + (i+1));
+        }
+        for (int i = 0; i < 3; i++)
+            root.add(users[i]);
+        for (int i = 3; i < 12; i++)
+            groups[i % 3].add(users[i]);
+        for (int i = 0; i < 12; i++)
+            for (int j = 0; j < 12; j++)
+                if (i != j && rand.nextBoolean()) users[i].follow(users[j]);
+        String[] words = new String[] {"new", "good", "bad", "sad", "normal"};
+        for (User user: users)
+            for (int i = 0; i < 5; i++)
+                user.post("I have a " + words[rand.nextInt(5)] + " day!");
 
-        user1.setName("User 1");
-        user2.setName("User 2");
-        user3.setName("User 3");
-        user4.setName("User 4");
-        user5.setName("User 5");
-        user6.setName("User 6");
-        user7.setName("User 7");
-        user8.setName("User 8");
-
-        UserGroup group1 = new UserGroup();
-        UserGroup group2 = new UserGroup();
-        UserGroup group3 = new UserGroup();
-
-        group1.setName("Group 1");
-        group2.setName("Group 2");
-        group3.setName("Group 3");
-
-        root.add(user1);
-        root.add(user2);
-        group1.add(user3);
-        group1.add(user4);
-        group2.add(user5);
-        group2.add(user6);
-        group3.add(user7);
-        group3.add(user8);
-        root.add(group1);
-        root.add(group2);
-        group1.add(group3);
+        groups[0].add(groups[1]);
+        root.add(groups[0]);
+        root.add(groups[2]);
 
         return root;
     }

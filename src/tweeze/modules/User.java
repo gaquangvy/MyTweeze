@@ -19,7 +19,6 @@ public class User implements Member {
     public String getName() { return name; }
     public List<String> getPosts() { return posts; }
     public List<String[]> getNewsfeed() { return newsfeed; }
-    public List<User> getFollowers() { return followers; }
     public List<User> getFollowings() { return followings; }
 
     public void setName(String name) { this.name = name; }
@@ -38,9 +37,14 @@ public class User implements Member {
         followings.add(someone);
         someone.followers.add(this);
     }
+
     public void post(String tweeze) {
         posts.add(0, tweeze);
         for (User u: followers)
             u.newsfeed.add(0, new String[] {name, tweeze});
+    }
+
+    public boolean equals(String newId) {
+        return id.equals(newId);
     }
 }
