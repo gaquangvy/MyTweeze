@@ -8,8 +8,10 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("rawtypes")
 public class UserView extends JPanel {
     //outputs
     private User viewed;
@@ -89,41 +91,38 @@ public class UserView extends JPanel {
         followingTitle.setText(viewing.equals(viewed.getId()) ? "Followings" : "Mutual Follow");
     }
 
-    private DefaultListModel generateFollowings() {
-        DefaultListModel followingsList = new DefaultListModel();
+    private String[] generateFollowings() {
+        List<String> followingsList = new ArrayList<>();
         List<User> viewedFollowings = viewed.getFollowings();
         List<User> viewingFollowings = viewing.getFollowings();
-        if (viewedFollowings.isEmpty()) followingsList.addElement("No Following");
+        if (viewedFollowings.isEmpty()) followingsList.add("No Following");
         for (User viewedLocal : viewedFollowings)
             for (User viewingLocal : viewingFollowings)
                 if (viewedLocal.equals(viewingLocal.getId())) {
-                    followingsList.addElement("- " + viewedLocal.getName() + " @" + viewedLocal.getId());
+                    followingsList.add("- " + viewedLocal.getName() + " @" + viewedLocal.getId());
                     break;
                 }
-        return followingsList;
+        return followingsList.toArray(new String[0]);
     }
 
-    private DefaultListModel generateNewsfeed() {
-        DefaultListModel newsfeed = new DefaultListModel();
+    private String[] generateNewsfeed() {
+        List<String> newsfeed = new ArrayList<>();
         List<String[]> news = viewed.getNewsfeed();
-        if (news.isEmpty()) newsfeed.addElement("Newsfeed is Empty");
+        if (news.isEmpty()) newsfeed.add("Newsfeed is Empty");
         else for (String[] post : news)
-            newsfeed.addElement("+ " + post[0] + ": " + post[1]);
-        return newsfeed;
+            newsfeed.add("+ " + post[0] + ": " + post[1]);
+        return newsfeed.toArray(new String[0]);
     }
 
-    private DefaultListModel generatePosts() {
-        DefaultListModel posts = new DefaultListModel();
-        if (viewed.getPosts().isEmpty()) posts.addElement("Newsfeed is Empty");
-        else for (String post : viewed.getPosts())
-            posts.addElement(post);
-        return posts;
+    private String[] generatePosts() {
+        if (viewed.getPosts().isEmpty()) return new String[]{"No Posts"};
+        return viewed.getPosts().toArray(new String[0]);
     }
 
     public void update() {
         username.setText(viewed.getId());
-        followingList.setModel(generateFollowings());
-        newfeedList.setModel(viewed.equals(viewing) ? generateNewsfeed() : generatePosts());
+        followingList.setListData(generateFollowings());
+        newfeedList.setListData(viewed.equals(viewing) ? generateNewsfeed() : generatePosts());
         tweezeContent.setText("");
         tweezeContent.setEnabled(viewed.equals(viewing));
         tweezeButton.setEnabled(false);

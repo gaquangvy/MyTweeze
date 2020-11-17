@@ -10,7 +10,7 @@ public class UserGroup implements Member {
 
     private String id;
     private String name;
-    private List<Member> members;
+    private final List<Member> members;
 
     public String getId() { return id; }
     public String getName() { return name; }

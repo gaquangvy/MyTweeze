@@ -40,7 +40,7 @@ public class HomeControl extends JPanel {
     //value input to show
     private final UserGroup root;
     private Member chosenMember;
-    private List<UserView> panels = new ArrayList<>();
+    private final List<UserView> panels = new ArrayList<>();
 
     public String getName() {
         return "My Tweeze (ADMIN)";
@@ -245,8 +245,6 @@ public class HomeControl extends JPanel {
 
     private DefaultMutableTreeNode generateTree(UserGroup root) {
         DefaultMutableTreeNode example = new DefaultMutableTreeNode(root.getId());
-        example.setAllowsChildren(true);
-        if (root.getMembers().isEmpty()) example.add(new DefaultMutableTreeNode());
         for (Member m : root.getMembers())
             if (m.getType() == Member.Type.USER)
                 example.add(new DefaultMutableTreeNode(m.getId()));
