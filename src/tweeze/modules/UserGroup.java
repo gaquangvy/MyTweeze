@@ -1,5 +1,6 @@
 package tweeze.modules;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -12,11 +13,14 @@ public class UserGroup implements Member {
     private String id;
     private String name;
     private final List<Member> members;
+    private final List<String[]> newsfeed;
 
     @Override
     public String getId() { return id; }
     @Override
     public String getName() { return name; }
+    @Override
+    public List<String[]> getNewsfeed() { return newsfeed; }
     public List<Member> getMembers() { return members; }
 
     @Override
@@ -28,16 +32,17 @@ public class UserGroup implements Member {
         id = "group" + ((int)(new Random().nextDouble() * 1000000));
         name = "New Group";
         members = new ArrayList<>();
+        newsfeed = new ArrayList<>();
+    }
+
+    public User foundUser(String userid) {
+        for (Member mem : members)
+            if (mem.equals(userid) && mem.getType() == Type.USER)
+                return (User) mem;
+        return null;
     }
 
     public void add(Member m) { members.add(m); }
-    public void remove(Member mem) {
-        Member found = null;
-        for (Member m: members)
-            if (m.equals(mem.getId()) && m.getType() == mem.getType())
-                found = m;
-        if (found != null) members.remove(found);
-    }
 
     @Override
     public boolean equals(String newId) {
@@ -45,7 +50,7 @@ public class UserGroup implements Member {
     }
 
     @Override
-    public void showOnPage(MemberView memberView) {
-        memberView.show(this);
+    public JPanel showOnPage(MemberView memberView) {
+        return memberView.show(this);
     }
 }

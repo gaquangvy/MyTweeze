@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("rawtypes")
-public class UserView extends JPanel {
+public class UserView extends JPanel implements ViewMember {
     //outputs
     private User viewed;
     private final User viewing;
@@ -119,6 +119,7 @@ public class UserView extends JPanel {
         return viewed.getPosts().toArray(new String[0]);
     }
 
+    @Override
     public void update() {
         username.setText(viewed.getId());
         followingList.setListData(generateFollowings());
@@ -235,8 +236,9 @@ public class UserView extends JPanel {
         final JPanel spacer1 = new JPanel();
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
-        gbc.gridy = 2;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridy = 1;
+        gbc.gridheight = 2;
+        gbc.fill = GridBagConstraints.BOTH;
         userView.add(spacer1, gbc);
         newsfeedTitle = new JLabel();
         newsfeedTitle.setFocusable(true);

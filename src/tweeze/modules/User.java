@@ -1,5 +1,6 @@
 package tweeze.modules;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -11,10 +12,10 @@ public class User implements Member {
 
     private String id;
     private String name;
-    private List<String[]> newsfeed;
-    private List<String> posts;
-    private List<User> followings;
-    private List<User> followers;
+    private final List<String[]> newsfeed;
+    private final List<String> posts;
+    private final List<User> followings;
+    private final List<User> followers;
 
     @Override
     public String getId() { return id; }
@@ -56,7 +57,7 @@ public class User implements Member {
     }
 
     @Override
-    public void showOnPage(MemberView memberView) {
-        memberView.show(this);
+    public JPanel showOnPage(MemberView memberView) {
+        return memberView.show(this);
     }
 }

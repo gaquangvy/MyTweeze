@@ -1,9 +1,6 @@
 package pages;
 
-import tweeze.modules.Member;
-import tweeze.modules.UIMembers;
-import tweeze.modules.User;
-import tweeze.modules.UserGroup;
+import tweeze.modules.*;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -40,7 +37,7 @@ public class HomeControl extends JPanel {
     //value input to show
     private final UserGroup root;
     private Member chosenMember;
-    private final List<UserView> panels = new ArrayList<>();
+    private final List<ViewMember> panels = new ArrayList<>();
 
     public String getName() {
         return "My Tweeze (ADMIN)";
@@ -190,9 +187,10 @@ public class HomeControl extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                UserView userView = new UserView((User) chosenMember);
+                MemberView memberView = new MemberViewImpl();
+                ViewMember userView = (ViewMember) chosenMember.showOnPage(memberView);
                 panels.add(userView);
-                new FramePage(userView);
+                new FramePage((JPanel) userView);
             }
         });
         groupTextField.addKeyListener(new KeyAdapter() {
@@ -239,6 +237,16 @@ public class HomeControl extends JPanel {
                         update();
                     }
                 }
+            }
+        });
+        groupViewButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                MemberView memberView = new MemberViewImpl();
+                ViewMember userView = (ViewMember) chosenMember.showOnPage(memberView);
+                panels.add(userView);
+                new FramePage((JPanel) userView);
             }
         });
     }
@@ -296,8 +304,10 @@ public class HomeControl extends JPanel {
         numberOfTotalGroupsButton.setText("Show Total Groups");
         numberOfTweezesButton.setText("Show Total Tweezes");
         showPositiveTweezeButton.setText("Show Positive Tweeze");
-        for (UserView view : panels)
+        for (ViewMember view : panels) {
+            JFrame frame = (JFrame) SwingUtilities.windowForComponent((Component) view);
             view.update();
+        }
     }
 
     {
@@ -438,7 +448,7 @@ public class HomeControl extends JPanel {
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.fill = GridBagConstraints.BOTH;
         panel2.add(spacer1, gbc);
         userViewButton = new JButton();
         userViewButton.setMaximumSize(new Dimension(180, 30));

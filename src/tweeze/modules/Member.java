@@ -1,8 +1,7 @@
 package tweeze.modules;
 
-import pages.UserView;
-
 import javax.swing.*;
+import java.util.List;
 
 //Component
 public interface Member {
@@ -12,27 +11,11 @@ public interface Member {
     String getId();
     String getName();
     Type getType();
+    List<String[]> getNewsfeed();
     void setName(String name);
     void setId(String id);
     boolean equals(String newId);
 
     //Visitor Design Pattern's methods
-    void showOnPage(MemberView memberView);
-}
-
-interface MemberView {
-    JPanel show(User user);
-    JPanel show(UserGroup group);
-}
-
-class MemberViewImpl implements MemberView {
-    @Override
-    public JPanel show(User user) {
-        return new UserView(user);
-    }
-
-    @Override
-    public JPanel show(UserGroup group) {
-        return null;
-    }
+    JPanel showOnPage(MemberView memberView);
 }
