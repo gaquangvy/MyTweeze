@@ -6,6 +6,7 @@ import java.util.Random;
 
 //Leaf
 public class User implements Member {
+    @Override
     public Type getType() { return Type.USER; }
 
     private String id;
@@ -15,14 +16,19 @@ public class User implements Member {
     private List<User> followings;
     private List<User> followers;
 
+    @Override
     public String getId() { return id; }
+    @Override
     public String getName() { return name; }
+
     public List<String> getPosts() { return posts; }
     public List<String[]> getNewsfeed() { return newsfeed; }
     public List<User> getFollowings() { return followings; }
 
+    @Override
     public void setName(String name) { this.name = name; }
-    public void setId(String id) {this.id = id;}
+    @Override
+    public void setId(String id) { this.id = id; }
 
     public User() {
         id = "user" + ((int)(new Random().nextDouble() * 1000000));
@@ -44,7 +50,13 @@ public class User implements Member {
             u.newsfeed.add(0, new String[] {name, tweeze});
     }
 
+    @Override
     public boolean equals(String newId) {
         return id.equals(newId);
+    }
+
+    @Override
+    public void showOnPage(MemberView memberView) {
+        memberView.show(this);
     }
 }

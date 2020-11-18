@@ -31,7 +31,7 @@ public class UserView extends JPanel {
     private JLabel newsfeedTitle;
     private JLabel followingTitle;
 
-    UserView(User user) {
+    public UserView(User user) {
         viewed = user;
         viewing = user;
         add(userView);
