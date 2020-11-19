@@ -307,6 +307,7 @@ public class HomeControl extends JPanel {
         showPositiveTweezeButton.setText("Show Positive Tweeze");
         for (ViewMember view : panels) {
             JFrame frame = (JFrame) SwingUtilities.windowForComponent((Component) view);
+            frame.setTitle(view.getName());
             view.update();
         }
     }

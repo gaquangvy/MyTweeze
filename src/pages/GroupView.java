@@ -14,6 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GroupView extends JPanel implements ViewMember {
+    @Override
+    public String getName() {
+        return currentGroup.getName() + " (@" + currentGroup.getId() + ") View ";
+    }
+
     private JPanel panel1;
     private JTextField changeID;
     private JButton changeIDButton;

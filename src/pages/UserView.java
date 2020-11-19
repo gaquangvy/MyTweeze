@@ -16,6 +16,7 @@ public class UserView extends JPanel implements ViewMember {
     private User viewed;
     private final User viewing;
 
+    @Override
     public String getName() {
         return "My Tweeze (" + viewing.getName() + " @" + viewing.getId() + ") View ";
     }
@@ -24,8 +25,8 @@ public class UserView extends JPanel implements ViewMember {
     private JButton followButton;
     private JButton tweezeButton;
     private JTextArea tweezeContent;
-    private JList followingList;
-    private JList newfeedList;
+    private JList<String> followingList;
+    private JList<String> newfeedList;
     private JTextField username;
     private JLabel newsfeedTitle;
     private JLabel followingTitle;
@@ -372,7 +373,7 @@ public class UserView extends JPanel implements ViewMember {
         gbc.gridy = 2;
         gbc.fill = GridBagConstraints.BOTH;
         userView.add(scrollPane2, gbc);
-        followingList = new JList();
+        followingList = new JList<String>();
         followingList.setMaximumSize(new Dimension(200, 200));
         followingList.setMinimumSize(new Dimension(200, 200));
         followingList.setPreferredSize(new Dimension(200, 200));
@@ -387,7 +388,7 @@ public class UserView extends JPanel implements ViewMember {
         gbc.gridy = 2;
         gbc.fill = GridBagConstraints.BOTH;
         userView.add(scrollPane3, gbc);
-        newfeedList = new JList();
+        newfeedList = new JList<String>();
         newfeedList.setMaximumSize(new Dimension(200, 200));
         newfeedList.setMinimumSize(new Dimension(200, 200));
         newfeedList.setPreferredSize(new Dimension(200, 200));

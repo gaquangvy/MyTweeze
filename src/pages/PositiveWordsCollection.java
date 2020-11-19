@@ -16,7 +16,7 @@ import java.util.Scanner;
 public class PositiveWordsCollection {
     public static List<String> outList() throws FileNotFoundException {
         List<String> output = new ArrayList<>();
-        Scanner in = new Scanner(new File("src/pages/PostiveWords.txt"));
+        Scanner in = new Scanner(new File("src/pages/PositiveWords.txt"));
         while (in.hasNextLine()) {
             String line = in.nextLine();
             line = line.split(". ")[1].toLowerCase();
