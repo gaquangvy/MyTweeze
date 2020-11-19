@@ -11,7 +11,6 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings("rawtypes")
 public class UserView extends JPanel implements ViewMember {
     //outputs
     private User viewed;
@@ -30,6 +29,10 @@ public class UserView extends JPanel implements ViewMember {
     private JTextField username;
     private JLabel newsfeedTitle;
     private JLabel followingTitle;
+    private JTextField changeId;
+    private JButton changeIDButton;
+    private JTextField changeName;
+    private JButton changeNameButton;
 
     public UserView(User user) {
         viewed = user;
@@ -82,6 +85,73 @@ public class UserView extends JPanel implements ViewMember {
                 HomeControl.getInstance().update();
             }
         });
+        changeId.addKeyListener(new KeyAdapter() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+                super.keyTyped(e);
+                String text = changeId.getText();
+                changeIDButton.setEnabled(text.length() > 2 && userCheck(text));
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                String text = changeId.getText();
+                if (e.getKeyCode() == 10 && text.length() > 2 && userCheck(text)) viewing.setId(text);
+                HomeControl.getInstance().update();
+            }
+        });
+        changeId.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                changeId.setText("");
+                changeIDButton.setEnabled(false);
+            }
+        });
+        changeIDButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                String text = changeId.getText();
+                if (text.length() > 2 && userCheck(text)) viewing.setId(text);
+                HomeControl.getInstance().update();
+            }
+        });
+        changeName.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                super.keyTyped(e);
+                String text = changeName.getText();
+                changeNameButton.setEnabled(text.length() > 2 && !viewing.getName().equals(text));
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                String text = changeName.getText();
+                if (e.getKeyCode() == 10 && text.length() > 2 && !viewing.getName().equals(text)) viewing.setName(text);
+                HomeControl.getInstance().update();
+            }
+        });
+        changeName.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                changeName.setText("");
+                changeNameButton.setEnabled(false);
+            }
+        });
+        changeNameButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                String text = changeName.getText();
+                if (text.length() > 2 && !viewing.getName().equals(text)) viewing.setName(text);
+                HomeControl.getInstance().update();
+            }
+        });
     }
 
     public void view(User other) {
@@ -89,6 +159,13 @@ public class UserView extends JPanel implements ViewMember {
         update();
         newsfeedTitle.setText(viewing.equals(viewed.getId()) ? "Newsfeed" : "User's Posts");
         followingTitle.setText(viewing.equals(viewed.getId()) ? "Followings" : "Mutual Follow");
+    }
+
+    private boolean userCheck(String name) {
+        boolean found = false;
+        for (User user : HomeControl.getInstance().collectUsers())
+            found |= user.equals(name);
+        return !found;
     }
 
     private String[] generateFollowings() {
@@ -123,13 +200,17 @@ public class UserView extends JPanel implements ViewMember {
     public void update() {
         username.setText(viewed.getId());
         followingList.setListData(generateFollowings());
-        newfeedList.setListData(viewed.equals(viewing) ? generateNewsfeed() : generatePosts());
+        newfeedList.setListData(viewed.equals(viewing.getId()) ? generateNewsfeed() : generatePosts());
         tweezeContent.setText("");
-        tweezeContent.setEnabled(viewed.equals(viewing));
-        tweezeButton.setEnabled(false);
+        tweezeContent.setEnabled(viewed.equals(viewing.getId()));
+        tweezeButton.setEnabled(viewed.equals(viewing.getId()));
         boolean found = false;
         for (User user : viewing.getFollowings()) found |= user.equals(viewed);
         followButton.setEnabled(!viewed.equals(viewing) && !found);
+        changeId.setEnabled(viewed.equals(viewing.getId()));
+        changeIDButton.setEnabled(viewed.equals(viewing.getId()));
+        changeName.setEnabled(viewed.equals(viewing.getId()));
+        changeNameButton.setEnabled(viewed.equals(viewing.getId()));
     }
 
     {
@@ -187,7 +268,7 @@ public class UserView extends JPanel implements ViewMember {
         tweezeButton.setText("Tweeze");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel1.add(tweezeButton, gbc);
@@ -197,16 +278,16 @@ public class UserView extends JPanel implements ViewMember {
         scrollPane1.setPreferredSize(new Dimension(340, 150));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         panel1.add(scrollPane1, gbc);
         tweezeContent = new JTextArea();
-        tweezeContent.setMaximumSize(new Dimension(340, 150));
-        tweezeContent.setMinimumSize(new Dimension(340, 150));
+        tweezeContent.setMaximumSize(new Dimension(340, 100));
+        tweezeContent.setMinimumSize(new Dimension(340, 100));
         tweezeContent.setOpaque(true);
-        tweezeContent.setPreferredSize(new Dimension(340, 150));
+        tweezeContent.setPreferredSize(new Dimension(340, 100));
         scrollPane1.setViewportView(tweezeContent);
         username = new JTextField();
         username.setHorizontalAlignment(0);
@@ -218,6 +299,32 @@ public class UserView extends JPanel implements ViewMember {
         gbc.gridx = 0;
         gbc.gridy = 0;
         panel1.add(username, gbc);
+        final JPanel panel2 = new JPanel();
+        panel2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        panel2.setBackground(new Color(-1126417));
+        panel2.setForeground(new Color(-1126417));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+        panel1.add(panel2, gbc);
+        changeId = new JTextField();
+        changeId.setMaximumSize(new Dimension(150, 30));
+        changeId.setMinimumSize(new Dimension(150, 30));
+        changeId.setPreferredSize(new Dimension(150, 30));
+        panel2.add(changeId);
+        changeIDButton = new JButton();
+        changeIDButton.setText("Change ID");
+        panel2.add(changeIDButton);
+        changeName = new JTextField();
+        changeName.setMaximumSize(new Dimension(150, 30));
+        changeName.setMinimumSize(new Dimension(150, 30));
+        changeName.setPreferredSize(new Dimension(150, 30));
+        panel2.add(changeName);
+        changeNameButton = new JButton();
+        changeNameButton.setText("Change Name");
+        panel2.add(changeNameButton);
         followingTitle = new JLabel();
         Font followingTitleFont = this.$$$getFont$$$("Comic Sans MS", Font.BOLD, 26, followingTitle.getFont());
         if (followingTitleFont != null) followingTitle.setFont(followingTitleFont);
@@ -266,9 +373,9 @@ public class UserView extends JPanel implements ViewMember {
         gbc.fill = GridBagConstraints.BOTH;
         userView.add(scrollPane2, gbc);
         followingList = new JList();
-        followingList.setMaximumSize(new Dimension(200, 350));
-        followingList.setMinimumSize(new Dimension(200, 350));
-        followingList.setPreferredSize(new Dimension(200, 350));
+        followingList.setMaximumSize(new Dimension(200, 200));
+        followingList.setMinimumSize(new Dimension(200, 200));
+        followingList.setPreferredSize(new Dimension(200, 200));
         scrollPane2.setViewportView(followingList);
         final JScrollPane scrollPane3 = new JScrollPane();
         scrollPane3.setMaximumSize(new Dimension(400, 350));
@@ -281,9 +388,9 @@ public class UserView extends JPanel implements ViewMember {
         gbc.fill = GridBagConstraints.BOTH;
         userView.add(scrollPane3, gbc);
         newfeedList = new JList();
-        newfeedList.setMaximumSize(new Dimension(400, 350));
-        newfeedList.setMinimumSize(new Dimension(400, 350));
-        newfeedList.setPreferredSize(new Dimension(400, 350));
+        newfeedList.setMaximumSize(new Dimension(200, 200));
+        newfeedList.setMinimumSize(new Dimension(200, 200));
+        newfeedList.setPreferredSize(new Dimension(200, 200));
         scrollPane3.setViewportView(newfeedList);
     }
 
