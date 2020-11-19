@@ -253,6 +253,7 @@ public class HomeControl extends JPanel {
 
     private DefaultMutableTreeNode generateTree(UserGroup root) {
         DefaultMutableTreeNode example = new DefaultMutableTreeNode(root.getId());
+        if (root.getMembers().isEmpty()) example.add(new DefaultMutableTreeNode());
         for (Member m : root.getMembers())
             if (m.getType() == Member.Type.USER)
                 example.add(new DefaultMutableTreeNode(m.getId()));
