@@ -33,6 +33,7 @@ public class HomeControl extends JPanel {
     private JButton groupViewButton;
     private JTextField userTextField;
     private JTextField groupTextField;
+    private JButton showMostUpdatedUserButton;
 
     //value input to show
     private final UserGroup root;
@@ -45,7 +46,7 @@ public class HomeControl extends JPanel {
 
     private static HomeControl instance = null;
 
-    private HomeControl() {
+    private HomeControl() throws InterruptedException {
         add(homeControl);
         root = UIMembers.generateExample1();
         root.setId("Root");
@@ -249,6 +250,27 @@ public class HomeControl extends JPanel {
                 new FramePage((JPanel) userView);
             }
         });
+        showMostUpdatedUserButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                showMostUpdatedUserButton.setText(
+                        showMostUpdatedUserButton.getText().equals("Show Most Updated User") ?
+                                (mostUpdatedUser().getId() + " updated on " + mostUpdatedUser().firstCreated()) :
+                                "Show Most Updated User"
+                );
+            }
+        });
+    }
+
+    private User mostUpdatedUser() {
+        User mostUpdated = collectUsers().get(0);
+        for (User user : collectUsers()) {
+            if (mostUpdated.getUpdated() < user.getUpdated())
+                mostUpdated = user;
+            System.out.println(user.getId() + " - " + user.getUpdated());
+        }
+        return mostUpdated;
     }
 
     private DefaultMutableTreeNode generateTree(UserGroup root) {
@@ -287,7 +309,7 @@ public class HomeControl extends JPanel {
         return groups;
     }
 
-    public static HomeControl getInstance() {
+    public static HomeControl getInstance() throws InterruptedException {
         if (instance == null) instance = new HomeControl();
         return instance;
     }
@@ -305,6 +327,7 @@ public class HomeControl extends JPanel {
         numberOfTotalGroupsButton.setText("Show Total Groups");
         numberOfTweezesButton.setText("Show Total Tweezes");
         showPositiveTweezeButton.setText("Show Positive Tweeze");
+        showMostUpdatedUserButton.setText("Show Most Updated User");
         for (ViewMember view : panels) {
             JFrame frame = (JFrame) SwingUtilities.windowForComponent((Component) view);
             frame.setTitle(view.getName());
@@ -423,11 +446,11 @@ public class HomeControl extends JPanel {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         panel1.add(groupTextField, gbc);
         final JPanel panel2 = new JPanel();
-        panel2.setLayout(new GridBagLayout());
+        panel2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         panel2.setBackground(new Color(-5008204));
-        panel2.setMaximumSize(new Dimension(400, 100));
-        panel2.setMinimumSize(new Dimension(400, 100));
-        panel2.setPreferredSize(new Dimension(400, 100));
+        panel2.setMaximumSize(new Dimension(400, 120));
+        panel2.setMinimumSize(new Dimension(400, 120));
+        panel2.setPreferredSize(new Dimension(400, 120));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -441,34 +464,27 @@ public class HomeControl extends JPanel {
         groupViewButton.setOpaque(true);
         groupViewButton.setPreferredSize(new Dimension(180, 30));
         groupViewButton.setText("Group View");
-        gbc = new GridBagConstraints();
-        gbc.gridx = 2;
-        gbc.gridy = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(groupViewButton, gbc);
-        final JPanel spacer1 = new JPanel();
-        gbc = new GridBagConstraints();
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.fill = GridBagConstraints.BOTH;
-        panel2.add(spacer1, gbc);
+        panel2.add(groupViewButton);
         userViewButton = new JButton();
         userViewButton.setMaximumSize(new Dimension(180, 30));
         userViewButton.setMinimumSize(new Dimension(180, 30));
         userViewButton.setOpaque(true);
         userViewButton.setPreferredSize(new Dimension(180, 30));
         userViewButton.setText("User View");
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        panel2.add(userViewButton, gbc);
+        panel2.add(userViewButton);
+        showMostUpdatedUserButton = new JButton();
+        showMostUpdatedUserButton.setMaximumSize(new Dimension(350, 40));
+        showMostUpdatedUserButton.setMinimumSize(new Dimension(350, 40));
+        showMostUpdatedUserButton.setOpaque(true);
+        showMostUpdatedUserButton.setPreferredSize(new Dimension(350, 40));
+        showMostUpdatedUserButton.setText("Show Most Updated User");
+        panel2.add(showMostUpdatedUserButton);
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new GridBagLayout());
         panel3.setBackground(new Color(-1126417));
-        panel3.setMaximumSize(new Dimension(400, 200));
-        panel3.setMinimumSize(new Dimension(400, 200));
-        panel3.setPreferredSize(new Dimension(400, 200));
+        panel3.setMaximumSize(new Dimension(400, 180));
+        panel3.setMinimumSize(new Dimension(400, 180));
+        panel3.setPreferredSize(new Dimension(400, 180));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 2;

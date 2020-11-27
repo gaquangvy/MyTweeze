@@ -20,7 +20,7 @@ public class UserGroup implements Member {
 
     @Override
     public String firstCreated() {
-        SimpleDateFormat formatter= new SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a");
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a");
         Date date = new Date(created);
         return formatter.format(date);
     }

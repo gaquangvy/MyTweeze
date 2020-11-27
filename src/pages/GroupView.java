@@ -46,13 +46,22 @@ public class GroupView extends JPanel implements ViewMember {
                 super.keyPressed(e);
                 if (e.getKeyCode() == 10) {
                     boolean found = false;
-                    List<UserGroup> groups = HomeControl.getInstance().collectGroups();
+                    List<UserGroup> groups = null;
+                    try {
+                        groups = HomeControl.getInstance().collectGroups();
+                    } catch (InterruptedException interruptedException) {
+                        interruptedException.printStackTrace();
+                    }
                     for (UserGroup group : groups) found |= group.equals(changeID.getText());
                     if (found) errorMessage("Your desired ID must be unique!");
                     else if (changeID.getText().contains(" "))
                         errorMessage("Your desired ID cannot have a space among it!");
                     else currentGroup.setId(changeID.getText());
-                    HomeControl.getInstance().update();
+                    try {
+                        HomeControl.getInstance().update();
+                    } catch (InterruptedException interruptedException) {
+                        interruptedException.printStackTrace();
+                    }
                 }
             }
         });
@@ -61,13 +70,22 @@ public class GroupView extends JPanel implements ViewMember {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 boolean found = false;
-                List<UserGroup> groups = HomeControl.getInstance().collectGroups();
+                List<UserGroup> groups = null;
+                try {
+                    groups = HomeControl.getInstance().collectGroups();
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
                 for (UserGroup group : groups) found |= group.equals(changeID.getText());
                 if (found) errorMessage("Your desired ID must be unique!");
                 else if (changeID.getText().contains(" "))
                     errorMessage("Your desired ID cannot have a space among it!");
                 else currentGroup.setId(changeID.getText());
-                HomeControl.getInstance().update();
+                try {
+                    HomeControl.getInstance().update();
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
             }
         });
         changeName.addKeyListener(new KeyAdapter() {
@@ -82,7 +100,11 @@ public class GroupView extends JPanel implements ViewMember {
                 super.keyPressed(e);
                 if (e.getKeyCode() == 10) {
                     currentGroup.setName(changeName.getText());
-                    HomeControl.getInstance().update();
+                    try {
+                        HomeControl.getInstance().update();
+                    } catch (InterruptedException interruptedException) {
+                        interruptedException.printStackTrace();
+                    }
                 }
             }
         });
@@ -91,7 +113,11 @@ public class GroupView extends JPanel implements ViewMember {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 currentGroup.setName(changeName.getText());
-                HomeControl.getInstance().update();
+                try {
+                    HomeControl.getInstance().update();
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
             }
         });
         list1.addMouseListener(new MouseAdapter() {

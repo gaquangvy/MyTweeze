@@ -50,7 +50,11 @@ public class UserView extends JPanel implements ViewMember {
                 String content = tweezeContent.getText();
                 if (!content.isEmpty() && content.length() > 2)
                     viewed.post(content);
-                HomeControl.getInstance().update();
+                try {
+                    HomeControl.getInstance().update();
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
             }
         });
         tweezeContent.addKeyListener(new KeyAdapter() {
@@ -66,9 +70,13 @@ public class UserView extends JPanel implements ViewMember {
                 super.keyPressed(e); //Enter keycode = 10
                 if (e.getKeyCode() == 10) {
                     User foundUser = null;
-                    for (User user : HomeControl.getInstance().collectUsers())
-                        if (user.getId().equals(username.getText()))
-                            foundUser = user;
+                    try {
+                        for (User user : HomeControl.getInstance().collectUsers())
+                            if (user.getId().equals(username.getText()))
+                                foundUser = user;
+                    } catch (InterruptedException interruptedException) {
+                        interruptedException.printStackTrace();
+                    }
                     if (foundUser != null) view(foundUser);
                 }
             }
@@ -85,7 +93,11 @@ public class UserView extends JPanel implements ViewMember {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 viewing.follow(viewed);
-                HomeControl.getInstance().update();
+                try {
+                    HomeControl.getInstance().update();
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
             }
         });
         changeId.addKeyListener(new KeyAdapter() {
@@ -104,12 +116,22 @@ public class UserView extends JPanel implements ViewMember {
                     if (text.contains(" ")) {
                         errorMessage("No space among your desired ID!");
                         changeId.setText("");
-                    } else if (userCheck(text)) viewing.setId(text);
-                    else {
-                        errorMessage("Your desired ID must be unique!");
-                        changeId.setText("");
+                    } else {
+                        try {
+                            if (userCheck(text)) viewing.setId(text);
+                            else {
+                                errorMessage("Your desired ID must be unique!");
+                                changeId.setText("");
+                            }
+                        } catch (InterruptedException interruptedException) {
+                            interruptedException.printStackTrace();
+                        }
                     }
-                HomeControl.getInstance().update();
+                try {
+                    HomeControl.getInstance().update();
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
             }
         });
         changeId.addMouseListener(new MouseAdapter() {
@@ -129,12 +151,22 @@ public class UserView extends JPanel implements ViewMember {
                     if (text.contains(" ")) {
                         errorMessage("No space among your desired ID!");
                         changeId.setText("");
-                    } else if (userCheck(text)) viewing.setId(text);
-                    else {
-                        errorMessage("Your desired ID must be unique!");
-                        changeId.setText("");
+                    } else {
+                        try {
+                            if (userCheck(text)) viewing.setId(text);
+                            else {
+                                errorMessage("Your desired ID must be unique!");
+                                changeId.setText("");
+                            }
+                        } catch (InterruptedException interruptedException) {
+                            interruptedException.printStackTrace();
+                        }
                     }
-                HomeControl.getInstance().update();
+                try {
+                    HomeControl.getInstance().update();
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
             }
         });
         changeName.addKeyListener(new KeyAdapter() {
@@ -150,7 +182,11 @@ public class UserView extends JPanel implements ViewMember {
                 super.keyPressed(e);
                 String text = changeName.getText();
                 if (e.getKeyCode() == 10 && text.length() > 2 && !viewing.getName().equals(text)) viewing.setName(text);
-                HomeControl.getInstance().update();
+                try {
+                    HomeControl.getInstance().update();
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
             }
         });
         changeName.addMouseListener(new MouseAdapter() {
@@ -167,7 +203,11 @@ public class UserView extends JPanel implements ViewMember {
                 super.mouseClicked(e);
                 String text = changeName.getText();
                 if (text.length() > 2 && !viewing.getName().equals(text)) viewing.setName(text);
-                HomeControl.getInstance().update();
+                try {
+                    HomeControl.getInstance().update();
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
             }
         });
     }
@@ -179,7 +219,7 @@ public class UserView extends JPanel implements ViewMember {
         followingTitle.setText(viewing.equals(viewed.getId()) ? "Followings" : "Mutual Follow");
     }
 
-    private boolean userCheck(String name) {
+    private boolean userCheck(String name) throws InterruptedException {
         boolean found = false;
         for (User user : HomeControl.getInstance().collectUsers())
             found |= user.equals(name);

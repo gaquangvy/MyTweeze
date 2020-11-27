@@ -112,24 +112,21 @@
               </component>
             </children>
           </grid>
-          <grid id="7e809" layout-manager="GridBagLayout">
+          <grid id="7e809" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
             <constraints>
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
               <gridbag weightx="1.0" weighty="1.0"/>
             </constraints>
             <properties>
               <background color="-5008204"/>
-              <maximumSize width="400" height="100"/>
-              <minimumSize width="400" height="100"/>
-              <preferredSize width="400" height="100"/>
+              <maximumSize width="400" height="120"/>
+              <minimumSize width="400" height="120"/>
+              <preferredSize width="400" height="120"/>
             </properties>
             <border type="none"/>
             <children>
               <component id="f7aff" class="javax.swing.JButton" binding="groupViewButton">
-                <constraints>
-                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
+                <constraints/>
                 <properties>
                   <maximumSize width="180" height="30"/>
                   <minimumSize width="180" height="30"/>
@@ -138,23 +135,24 @@
                   <text value="Group View"/>
                 </properties>
               </component>
-              <hspacer id="3475b">
-                <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-              </hspacer>
               <component id="fb75e" class="javax.swing.JButton" binding="userViewButton">
-                <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
+                <constraints/>
                 <properties>
                   <maximumSize width="180" height="30"/>
                   <minimumSize width="180" height="30"/>
                   <opaque value="true"/>
                   <preferredSize width="180" height="30"/>
                   <text value="User View"/>
+                </properties>
+              </component>
+              <component id="517e3" class="javax.swing.JButton" binding="showMostUpdatedUserButton" default-binding="true">
+                <constraints/>
+                <properties>
+                  <maximumSize width="350" height="40"/>
+                  <minimumSize width="350" height="40"/>
+                  <opaque value="true"/>
+                  <preferredSize width="350" height="40"/>
+                  <text value="Show Most Updated User"/>
                 </properties>
               </component>
             </children>
@@ -166,9 +164,9 @@
             </constraints>
             <properties>
               <background color="-1126417"/>
-              <maximumSize width="400" height="200"/>
-              <minimumSize width="400" height="200"/>
-              <preferredSize width="400" height="200"/>
+              <maximumSize width="400" height="180"/>
+              <minimumSize width="400" height="180"/>
+              <preferredSize width="400" height="180"/>
             </properties>
             <border type="none"/>
             <children>

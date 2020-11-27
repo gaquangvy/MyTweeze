@@ -27,13 +27,14 @@ public class User implements Member {
     public String getName() { return name; }
     @Override
     public String firstCreated() {
-        SimpleDateFormat formatter= new SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a");
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a");
         Date date = new Date(created);
         return formatter.format(date);
     }
 
+    public long getUpdated() { return updated; }
     public String lastUpdated() {
-        SimpleDateFormat formatter= new SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a");
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a");
         Date date = new Date(updated);
         return formatter.format(date);
     }
