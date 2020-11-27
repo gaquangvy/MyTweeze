@@ -87,19 +87,27 @@ public class UserView extends JPanel implements ViewMember {
             }
         });
         changeId.addKeyListener(new KeyAdapter() {
-
             @Override
             public void keyTyped(KeyEvent e) {
                 super.keyTyped(e);
                 String text = changeId.getText();
-                changeIDButton.setEnabled(text.length() > 2 && userCheck(text));
+                changeIDButton.setEnabled(text.length() > 2);
             }
 
             @Override
             public void keyPressed(KeyEvent e) {
                 super.keyPressed(e);
                 String text = changeId.getText();
-                if (e.getKeyCode() == 10 && text.length() > 2 && userCheck(text)) viewing.setId(text);
+                if (e.getKeyCode() == 10 && text.length() > 2)
+                    if (text.contains(" ")) {
+                        errorMessage("No space among your desired ID!");
+                        changeId.setText("");
+                    }
+                    else if (userCheck(text)) viewing.setId(text);
+                    else {
+                        errorMessage("Your desired ID must be unique!");
+                        changeId.setText("");
+                    }
                 HomeControl.getInstance().update();
             }
         });
@@ -116,7 +124,16 @@ public class UserView extends JPanel implements ViewMember {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 String text = changeId.getText();
-                if (text.length() > 2 && userCheck(text)) viewing.setId(text);
+                if (text.length() > 2)
+                    if (text.contains(" ")) {
+                        errorMessage("No space among your desired ID!");
+                        changeId.setText("");
+                    }
+                    else if (userCheck(text)) viewing.setId(text);
+                    else {
+                        errorMessage("Your desired ID must be unique!");
+                        changeId.setText("");
+                    }
                 HomeControl.getInstance().update();
             }
         });
@@ -195,6 +212,10 @@ public class UserView extends JPanel implements ViewMember {
     private String[] generatePosts() {
         if (viewed.getPosts().isEmpty()) return new String[]{"No Posts"};
         return viewed.getPosts().toArray(new String[0]);
+    }
+
+    private void errorMessage(String error) {
+        JOptionPane.showMessageDialog(this, error, "Error Found!", JOptionPane.ERROR_MESSAGE);
     }
 
     @Override
@@ -373,7 +394,7 @@ public class UserView extends JPanel implements ViewMember {
         gbc.gridy = 2;
         gbc.fill = GridBagConstraints.BOTH;
         userView.add(scrollPane2, gbc);
-        followingList = new JList<String>();
+        followingList = new JList();
         followingList.setMaximumSize(new Dimension(200, 200));
         followingList.setMinimumSize(new Dimension(200, 200));
         followingList.setPreferredSize(new Dimension(200, 200));
@@ -388,7 +409,7 @@ public class UserView extends JPanel implements ViewMember {
         gbc.gridy = 2;
         gbc.fill = GridBagConstraints.BOTH;
         userView.add(scrollPane3, gbc);
-        newfeedList = new JList<String>();
+        newfeedList = new JList();
         newfeedList.setMaximumSize(new Dimension(200, 200));
         newfeedList.setMinimumSize(new Dimension(200, 200));
         newfeedList.setPreferredSize(new Dimension(200, 200));

@@ -47,7 +47,9 @@ public class GroupView extends JPanel implements ViewMember {
                     boolean found = false;
                     List<UserGroup> groups = HomeControl.getInstance().collectGroups();
                     for (UserGroup group : groups) found |= group.equals(changeID.getText());
-                    if (!found) currentGroup.setId(changeID.getText());
+                    if (found) errorMessage("Your desired ID must be unique!");
+                    else if (changeID.getText().contains(" ")) errorMessage("Your desired ID cannot have a space among it!");
+                    else currentGroup.setId(changeID.getText());
                     HomeControl.getInstance().update();
                 }
             }
@@ -59,7 +61,9 @@ public class GroupView extends JPanel implements ViewMember {
                 boolean found = false;
                 List<UserGroup> groups = HomeControl.getInstance().collectGroups();
                 for (UserGroup group : groups) found |= group.equals(changeID.getText());
-                if (!found) currentGroup.setId(changeID.getText());
+                if (found) errorMessage("Your desired ID must be unique!");
+                else if (changeID.getText().contains(" ")) errorMessage("Your desired ID cannot have a space among it!");
+                else currentGroup.setId(changeID.getText());
                 HomeControl.getInstance().update();
             }
         });
@@ -124,6 +128,10 @@ public class GroupView extends JPanel implements ViewMember {
             if (mem.getType() == Member.Type.GROUP)
                 result.add("- " + mem.getName() + " @" + mem.getId());
         return result.toArray(new String[0]);
+    }
+
+    private void errorMessage(String error) {
+        JOptionPane.showMessageDialog(this, error, "Error Found!", JOptionPane.ERROR_MESSAGE);
     }
 
     {
