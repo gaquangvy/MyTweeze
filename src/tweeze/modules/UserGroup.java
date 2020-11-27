@@ -1,7 +1,9 @@
 package tweeze.modules;
 
 import javax.swing.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -14,7 +16,14 @@ public class UserGroup implements Member {
     private String name;
     private final List<Member> members;
     private final List<String[]> newsfeed;
+    private final long created;
 
+    @Override
+    public String firstCreated() {
+        SimpleDateFormat formatter= new SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a");
+        Date date = new Date(created);
+        return formatter.format(date);
+    }
     @Override
     public String getId() { return id; }
     @Override
@@ -33,6 +42,7 @@ public class UserGroup implements Member {
         name = "New Group";
         members = new ArrayList<>();
         newsfeed = new ArrayList<>();
+        created = System.currentTimeMillis();
     }
 
     public User foundUser(String userid) {

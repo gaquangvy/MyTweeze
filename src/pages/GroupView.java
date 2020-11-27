@@ -26,6 +26,7 @@ public class GroupView extends JPanel implements ViewMember {
     private JButton changeNameButton;
     private JList<String> list1;
     private JList<String> list2;
+    private JLabel created;
 
     private final UserGroup currentGroup;
 
@@ -48,7 +49,8 @@ public class GroupView extends JPanel implements ViewMember {
                     List<UserGroup> groups = HomeControl.getInstance().collectGroups();
                     for (UserGroup group : groups) found |= group.equals(changeID.getText());
                     if (found) errorMessage("Your desired ID must be unique!");
-                    else if (changeID.getText().contains(" ")) errorMessage("Your desired ID cannot have a space among it!");
+                    else if (changeID.getText().contains(" "))
+                        errorMessage("Your desired ID cannot have a space among it!");
                     else currentGroup.setId(changeID.getText());
                     HomeControl.getInstance().update();
                 }
@@ -62,7 +64,8 @@ public class GroupView extends JPanel implements ViewMember {
                 List<UserGroup> groups = HomeControl.getInstance().collectGroups();
                 for (UserGroup group : groups) found |= group.equals(changeID.getText());
                 if (found) errorMessage("Your desired ID must be unique!");
-                else if (changeID.getText().contains(" ")) errorMessage("Your desired ID cannot have a space among it!");
+                else if (changeID.getText().contains(" "))
+                    errorMessage("Your desired ID cannot have a space among it!");
                 else currentGroup.setId(changeID.getText());
                 HomeControl.getInstance().update();
             }
@@ -115,6 +118,7 @@ public class GroupView extends JPanel implements ViewMember {
         changeNameButton.setEnabled(false);
         list1.setListData(seperatedMembers());
         list2.setListData(new String[]{"No selected user to view his/her posts."});
+        created.setText("Created on " + currentGroup.firstCreated());
     }
 
     private String[] seperatedMembers() {
@@ -154,9 +158,10 @@ public class GroupView extends JPanel implements ViewMember {
         panel1.setBackground(new Color(-12236470));
         final JPanel panel2 = new JPanel();
         panel2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-        panel2.setMaximumSize(new Dimension(600, 35));
-        panel2.setMinimumSize(new Dimension(600, 35));
-        panel2.setPreferredSize(new Dimension(600, 35));
+        panel2.setBackground(new Color(-1126417));
+        panel2.setMaximumSize(new Dimension(600, 40));
+        panel2.setMinimumSize(new Dimension(600, 40));
+        panel2.setPreferredSize(new Dimension(600, 40));
         GridBagConstraints gbc;
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -180,6 +185,7 @@ public class GroupView extends JPanel implements ViewMember {
         panel2.add(changeIDButton);
         final JPanel panel3 = new JPanel();
         panel3.setLayout(new BorderLayout(0, 0));
+        panel3.setBackground(new Color(-12517319));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -190,6 +196,7 @@ public class GroupView extends JPanel implements ViewMember {
         final JLabel label1 = new JLabel();
         Font label1Font = this.$$$getFont$$$("Forte", Font.BOLD, 20, label1.getFont());
         if (label1Font != null) label1.setFont(label1Font);
+        label1.setForeground(new Color(-1114370));
         label1.setHorizontalAlignment(0);
         label1.setText("Member");
         panel3.add(label1, BorderLayout.NORTH);
@@ -197,12 +204,14 @@ public class GroupView extends JPanel implements ViewMember {
         list1.setBackground(new Color(-1126417));
         Font list1Font = this.$$$getFont$$$(null, -1, 12, list1.getFont());
         if (list1Font != null) list1.setFont(list1Font);
+        list1.setForeground(new Color(-16777216));
         list1.setMaximumSize(new Dimension(150, 150));
         list1.setMinimumSize(new Dimension(150, 150));
         list1.setPreferredSize(new Dimension(150, 150));
         panel3.add(list1, BorderLayout.CENTER);
         final JPanel panel4 = new JPanel();
         panel4.setLayout(new BorderLayout(0, 0));
+        panel4.setBackground(new Color(-12517319));
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
         gbc.gridy = 2;
@@ -213,6 +222,7 @@ public class GroupView extends JPanel implements ViewMember {
         final JLabel label2 = new JLabel();
         Font label2Font = this.$$$getFont$$$("Forte", Font.BOLD, 20, label2.getFont());
         if (label2Font != null) label2.setFont(label2Font);
+        label2.setForeground(new Color(-1114370));
         label2.setHorizontalAlignment(0);
         label2.setText("Newsfeed");
         panel4.add(label2, BorderLayout.NORTH);
@@ -220,15 +230,18 @@ public class GroupView extends JPanel implements ViewMember {
         list2.setBackground(new Color(-1126417));
         Font list2Font = this.$$$getFont$$$(null, -1, 12, list2.getFont());
         if (list2Font != null) list2.setFont(list2Font);
+        list2.setForeground(new Color(-16777216));
         list2.setMaximumSize(new Dimension(430, 200));
         list2.setMinimumSize(new Dimension(430, 200));
         list2.setPreferredSize(new Dimension(430, 200));
         panel4.add(list2, BorderLayout.CENTER);
         final JPanel panel5 = new JPanel();
         panel5.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-        panel5.setMaximumSize(new Dimension(600, 35));
-        panel5.setMinimumSize(new Dimension(600, 35));
-        panel5.setPreferredSize(new Dimension(600, 35));
+        panel5.setBackground(new Color(-1126417));
+        panel5.setForeground(new Color(-1126417));
+        panel5.setMaximumSize(new Dimension(600, 40));
+        panel5.setMinimumSize(new Dimension(600, 40));
+        panel5.setPreferredSize(new Dimension(600, 40));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -252,6 +265,24 @@ public class GroupView extends JPanel implements ViewMember {
         gbc.gridy = 2;
         gbc.fill = GridBagConstraints.BOTH;
         panel1.add(spacer1, gbc);
+        final JPanel panel6 = new JPanel();
+        panel6.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        panel6.setBackground(new Color(-4168530));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 3;
+        gbc.fill = GridBagConstraints.BOTH;
+        panel1.add(panel6, gbc);
+        created = new JLabel();
+        created.setForeground(new Color(-16777216));
+        created.setHorizontalAlignment(0);
+        created.setHorizontalTextPosition(0);
+        created.setMaximumSize(new Dimension(600, 30));
+        created.setMinimumSize(new Dimension(600, 30));
+        created.setPreferredSize(new Dimension(600, 30));
+        created.setText("Label");
+        panel6.add(created);
     }
 
     /**

@@ -82,11 +82,12 @@
               <gridbag weightx="0.0" weighty="0.0"/>
             </constraints>
             <properties>
+              <enabled value="true"/>
               <horizontalAlignment value="0"/>
-              <maximumSize width="550" height="50"/>
-              <minimumSize width="550" height="50"/>
+              <maximumSize width="550" height="30"/>
+              <minimumSize width="550" height="30"/>
               <opaque value="false"/>
-              <preferredSize width="550" height="50"/>
+              <preferredSize width="550" height="30"/>
             </properties>
           </component>
           <grid id="7c1f5" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
@@ -186,9 +187,9 @@
           <component id="aa0be" class="javax.swing.JList" binding="followingList">
             <constraints/>
             <properties>
-              <maximumSize width="200" height="200"/>
-              <minimumSize width="200" height="200"/>
-              <preferredSize width="200" height="200"/>
+              <maximumSize width="200" height="150"/>
+              <minimumSize width="200" height="150"/>
+              <preferredSize width="200" height="150"/>
             </properties>
           </component>
         </children>
@@ -209,13 +210,56 @@
           <component id="3c435" class="javax.swing.JList" binding="newfeedList">
             <constraints/>
             <properties>
-              <maximumSize width="200" height="200"/>
-              <minimumSize width="200" height="200"/>
-              <preferredSize width="200" height="200"/>
+              <maximumSize width="200" height="150"/>
+              <minimumSize width="200" height="150"/>
+              <preferredSize width="200" height="150"/>
             </properties>
           </component>
         </children>
       </scrollpane>
+      <grid id="cf78c" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <background color="-4168530"/>
+          <maximumSize width="600" height="70"/>
+          <minimumSize width="600" height="70"/>
+          <preferredSize width="600" height="70"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="5648b" class="javax.swing.JLabel" binding="created">
+            <constraints/>
+            <properties>
+              <foreground color="-16777216"/>
+              <horizontalAlignment value="0"/>
+              <horizontalTextPosition value="0"/>
+              <maximumSize width="600" height="30"/>
+              <minimumSize width="600" height="30"/>
+              <preferredSize width="600" height="30"/>
+              <text value="Label"/>
+              <verticalAlignment value="3"/>
+              <verticalTextPosition value="3"/>
+            </properties>
+          </component>
+          <component id="752e3" class="javax.swing.JLabel" binding="updated">
+            <constraints/>
+            <properties>
+              <foreground color="-16777216"/>
+              <horizontalAlignment value="0"/>
+              <horizontalTextPosition value="0"/>
+              <maximumSize width="600" height="30"/>
+              <minimumSize width="600" height="30"/>
+              <preferredSize width="600" height="30"/>
+              <text value="Label"/>
+              <verticalAlignment value="1"/>
+              <verticalTextPosition value="1"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
     </children>
   </grid>
 </form>

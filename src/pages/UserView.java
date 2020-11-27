@@ -34,6 +34,8 @@ public class UserView extends JPanel implements ViewMember {
     private JButton changeIDButton;
     private JTextField changeName;
     private JButton changeNameButton;
+    private JLabel created;
+    private JLabel updated;
 
     public UserView(User user) {
         viewed = user;
@@ -102,8 +104,7 @@ public class UserView extends JPanel implements ViewMember {
                     if (text.contains(" ")) {
                         errorMessage("No space among your desired ID!");
                         changeId.setText("");
-                    }
-                    else if (userCheck(text)) viewing.setId(text);
+                    } else if (userCheck(text)) viewing.setId(text);
                     else {
                         errorMessage("Your desired ID must be unique!");
                         changeId.setText("");
@@ -128,8 +129,7 @@ public class UserView extends JPanel implements ViewMember {
                     if (text.contains(" ")) {
                         errorMessage("No space among your desired ID!");
                         changeId.setText("");
-                    }
-                    else if (userCheck(text)) viewing.setId(text);
+                    } else if (userCheck(text)) viewing.setId(text);
                     else {
                         errorMessage("Your desired ID must be unique!");
                         changeId.setText("");
@@ -233,6 +233,8 @@ public class UserView extends JPanel implements ViewMember {
         changeIDButton.setEnabled(viewed.equals(viewing.getId()));
         changeName.setEnabled(viewed.equals(viewing.getId()));
         changeNameButton.setEnabled(viewed.equals(viewing.getId()));
+        created.setText("Created on " + viewed.firstCreated());
+        updated.setText("Updated on " + viewed.lastUpdated());
     }
 
     {
@@ -312,11 +314,12 @@ public class UserView extends JPanel implements ViewMember {
         tweezeContent.setPreferredSize(new Dimension(340, 100));
         scrollPane1.setViewportView(tweezeContent);
         username = new JTextField();
+        username.setEnabled(true);
         username.setHorizontalAlignment(0);
-        username.setMaximumSize(new Dimension(550, 50));
-        username.setMinimumSize(new Dimension(550, 50));
+        username.setMaximumSize(new Dimension(550, 30));
+        username.setMinimumSize(new Dimension(550, 30));
         username.setOpaque(false);
-        username.setPreferredSize(new Dimension(550, 50));
+        username.setPreferredSize(new Dimension(550, 30));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -395,9 +398,9 @@ public class UserView extends JPanel implements ViewMember {
         gbc.fill = GridBagConstraints.BOTH;
         userView.add(scrollPane2, gbc);
         followingList = new JList();
-        followingList.setMaximumSize(new Dimension(200, 200));
-        followingList.setMinimumSize(new Dimension(200, 200));
-        followingList.setPreferredSize(new Dimension(200, 200));
+        followingList.setMaximumSize(new Dimension(200, 150));
+        followingList.setMinimumSize(new Dimension(200, 150));
+        followingList.setPreferredSize(new Dimension(200, 150));
         scrollPane2.setViewportView(followingList);
         final JScrollPane scrollPane3 = new JScrollPane();
         scrollPane3.setMaximumSize(new Dimension(400, 350));
@@ -410,10 +413,44 @@ public class UserView extends JPanel implements ViewMember {
         gbc.fill = GridBagConstraints.BOTH;
         userView.add(scrollPane3, gbc);
         newfeedList = new JList();
-        newfeedList.setMaximumSize(new Dimension(200, 200));
-        newfeedList.setMinimumSize(new Dimension(200, 200));
-        newfeedList.setPreferredSize(new Dimension(200, 200));
+        newfeedList.setMaximumSize(new Dimension(200, 150));
+        newfeedList.setMinimumSize(new Dimension(200, 150));
+        newfeedList.setPreferredSize(new Dimension(200, 150));
         scrollPane3.setViewportView(newfeedList);
+        final JPanel panel3 = new JPanel();
+        panel3.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        panel3.setBackground(new Color(-4168530));
+        panel3.setMaximumSize(new Dimension(600, 70));
+        panel3.setMinimumSize(new Dimension(600, 70));
+        panel3.setPreferredSize(new Dimension(600, 70));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 3;
+        gbc.fill = GridBagConstraints.BOTH;
+        userView.add(panel3, gbc);
+        created = new JLabel();
+        created.setForeground(new Color(-16777216));
+        created.setHorizontalAlignment(0);
+        created.setHorizontalTextPosition(0);
+        created.setMaximumSize(new Dimension(600, 30));
+        created.setMinimumSize(new Dimension(600, 30));
+        created.setPreferredSize(new Dimension(600, 30));
+        created.setText("Label");
+        created.setVerticalAlignment(3);
+        created.setVerticalTextPosition(3);
+        panel3.add(created);
+        updated = new JLabel();
+        updated.setForeground(new Color(-16777216));
+        updated.setHorizontalAlignment(0);
+        updated.setHorizontalTextPosition(0);
+        updated.setMaximumSize(new Dimension(600, 30));
+        updated.setMinimumSize(new Dimension(600, 30));
+        updated.setPreferredSize(new Dimension(600, 30));
+        updated.setText("Label");
+        updated.setVerticalAlignment(1);
+        updated.setVerticalTextPosition(1);
+        panel3.add(updated);
     }
 
     /**

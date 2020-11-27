@@ -19,9 +19,10 @@
           <gridbag weightx="1.0" weighty="1.0"/>
         </constraints>
         <properties>
-          <maximumSize width="600" height="35"/>
-          <minimumSize width="600" height="35"/>
-          <preferredSize width="600" height="35"/>
+          <background color="-1126417"/>
+          <maximumSize width="600" height="40"/>
+          <minimumSize width="600" height="40"/>
+          <preferredSize width="600" height="40"/>
         </properties>
         <border type="none"/>
         <children>
@@ -50,13 +51,16 @@
           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <gridbag weightx="1.0" weighty="1.0"/>
         </constraints>
-        <properties/>
+        <properties>
+          <background color="-12517319"/>
+        </properties>
         <border type="none"/>
         <children>
           <component id="8ed75" class="javax.swing.JLabel">
             <constraints border-constraint="North"/>
             <properties>
               <font name="Forte" size="20" style="1"/>
+              <foreground color="-1114370"/>
               <horizontalAlignment value="0"/>
               <text value="Member"/>
             </properties>
@@ -66,6 +70,7 @@
             <properties>
               <background color="-1126417"/>
               <font size="12"/>
+              <foreground color="-16777216"/>
               <maximumSize width="150" height="150"/>
               <minimumSize width="150" height="150"/>
               <preferredSize width="150" height="150"/>
@@ -78,13 +83,16 @@
           <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
           <gridbag weightx="1.0" weighty="1.0"/>
         </constraints>
-        <properties/>
+        <properties>
+          <background color="-12517319"/>
+        </properties>
         <border type="none"/>
         <children>
           <component id="4dba2" class="javax.swing.JLabel">
             <constraints border-constraint="North"/>
             <properties>
               <font name="Forte" size="20" style="1"/>
+              <foreground color="-1114370"/>
               <horizontalAlignment value="0"/>
               <text value="Newsfeed"/>
             </properties>
@@ -94,6 +102,7 @@
             <properties>
               <background color="-1126417"/>
               <font size="12"/>
+              <foreground color="-16777216"/>
               <maximumSize width="430" height="200"/>
               <minimumSize width="430" height="200"/>
               <preferredSize width="430" height="200"/>
@@ -111,9 +120,11 @@
           <gridbag weightx="1.0" weighty="1.0"/>
         </constraints>
         <properties>
-          <maximumSize width="600" height="35"/>
-          <minimumSize width="600" height="35"/>
-          <preferredSize width="600" height="35"/>
+          <background color="-1126417"/>
+          <foreground color="-1126417"/>
+          <maximumSize width="600" height="40"/>
+          <minimumSize width="600" height="40"/>
+          <preferredSize width="600" height="40"/>
         </properties>
         <border type="none"/>
         <children>
@@ -140,6 +151,30 @@
           <gridbag weightx="0.0" weighty="0.0"/>
         </constraints>
       </hspacer>
+      <grid id="b4787" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="3" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+          <gridbag weightx="0.0" weighty="0.0"/>
+        </constraints>
+        <properties>
+          <background color="-4168530"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="d00a2" class="javax.swing.JLabel" binding="created">
+            <constraints/>
+            <properties>
+              <foreground color="-16777216"/>
+              <horizontalAlignment value="0"/>
+              <horizontalTextPosition value="0"/>
+              <maximumSize width="600" height="30"/>
+              <minimumSize width="600" height="30"/>
+              <preferredSize width="600" height="30"/>
+              <text value="Label"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
     </children>
   </grid>
 </form>

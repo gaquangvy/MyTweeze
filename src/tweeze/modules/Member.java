@@ -15,6 +15,7 @@ public interface Member {
     void setName(String name);
     void setId(String id);
     boolean equals(String newId);
+    String firstCreated();
 
     //Visitor Design Pattern's methods
     JPanel showOnPage(MemberView memberView);

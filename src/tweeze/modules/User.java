@@ -1,7 +1,9 @@
 package tweeze.modules;
 
 import javax.swing.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -16,12 +18,25 @@ public class User implements Member {
     private final List<String> posts;
     private final List<User> followings;
     private final List<User> followers;
+    private final long created;
+    private long updated;
 
     @Override
     public String getId() { return id; }
     @Override
     public String getName() { return name; }
+    @Override
+    public String firstCreated() {
+        SimpleDateFormat formatter= new SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a");
+        Date date = new Date(created);
+        return formatter.format(date);
+    }
 
+    public String lastUpdated() {
+        SimpleDateFormat formatter= new SimpleDateFormat("MMM dd, yyyy 'at' hh:mm a");
+        Date date = new Date(updated);
+        return formatter.format(date);
+    }
     public List<String> getPosts() { return posts; }
     public List<String[]> getNewsfeed() { return newsfeed; }
     public List<User> getFollowings() { return followings; }
@@ -38,6 +53,8 @@ public class User implements Member {
         newsfeed = new ArrayList<>();
         followings = new ArrayList<>();
         followers = new ArrayList<>();
+        created = System.currentTimeMillis();
+        updated = System.currentTimeMillis();
     }
 
     public void follow(User someone) {
@@ -47,6 +64,7 @@ public class User implements Member {
 
     public void post(String tweeze) {
         posts.add(0, tweeze);
+        updated = System.currentTimeMillis();
         for (User u: followers)
             u.newsfeed.add(0, new String[] {name, tweeze});
     }
